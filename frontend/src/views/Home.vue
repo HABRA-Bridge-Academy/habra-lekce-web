@@ -1,12 +1,17 @@
 <template>
-
-<v-app-bar :elevation="2">
-
-  <router-link  :to="{ name: 'test'}"> Odkaz pryc </router-link>
-</v-app-bar>
-
-
-
+  <v-toolbar 
+  inverted-scroll
+  title="HABRA - Lekce">
+    <div class='d-flex flex-wrap ga-3'>
+      <v-btn variant="tonal" >
+        <router-link  :to="{ name: 'Registrace'}"> Registrace </router-link>
+      </v-btn>
+      <v-btn variant="tonal" >
+        <router-link  :to="{ name: 'Přihlášení'}"> Přihlášení </router-link>
+      </v-btn>
+    </div>
+  </v-toolbar>
+  <HelloWorld />
   <HelloWorld />
 </template>
 

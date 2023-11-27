@@ -1,2 +1,2 @@
 
-Ahojka
+Ahojka: ne

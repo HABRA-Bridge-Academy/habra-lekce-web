@@ -26,12 +26,19 @@
         v-model="state.select"
         :items="items"
         :error-messages="v$.select.$errors.map(e => e.$message)"
-        label="Osoba"
+        label="Účel"
         required
         @change="v$.select.$touch"
         @blur="v$.select.$touch"
       ></v-select>
-  
+    
+      <v-text-field
+        v-model="pasword"
+        label="Heslo"
+        :error-messages="v$.name.$errors.map(e => e.$message)"
+        required
+      ></v-text-field>
+
       <v-checkbox
         v-model="state.checkbox"
         :error-messages="v$.checkbox.$errors.map(e => e.$message)"
@@ -55,6 +62,7 @@
       name: '',
       email: '',
       select: null,
+      pasword: '',
       checkbox: null,
     }
   

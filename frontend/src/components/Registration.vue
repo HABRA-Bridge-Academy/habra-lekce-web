@@ -1,6 +1,6 @@
 <template>
-     <div class = "nadpis">
-        Havířovská Bridžová Akademie - registrace
+    <div class = "header text-white">
+        <h1>Havířovská Bridžová Akademie - registrace</h1>
     </div>
     <form>
       <v-text-field
@@ -91,9 +91,22 @@
     }
   </script>
   <style>
-  .nadpis{
+  .side-collums{
+    display: flex;
+    ;
+  }
+  .header{
+
     min-height: 100px;
+    font-size: large;
     text-align: center;
     background-color: #1A237E;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+
+  
    }</style>
  

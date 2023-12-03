@@ -1,6 +1,5 @@
 <template>
   <v-toolbar 
-  inverted-scroll
   title="HABRA - Lekce">
     <div class='d-flex flex-wrap ga-3'>
       <v-btn variant="tonal" >

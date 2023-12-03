@@ -1,6 +1,7 @@
 <template>
-    <v-toolbar title="Havířovská Bridžová Akademie - registrace">
-    </v-toolbar>
+     <div class = "nadpis">
+        Havířovská Bridžová Akademie - registrace
+    </div>
     <form>
       <v-text-field
         v-model="state.name"
@@ -23,7 +24,7 @@
   
       <v-select
         v-model="state.select"
-        :Osoba="Osoba"
+        :items="items"
         :error-messages="v$.select.$errors.map(e => e.$message)"
         label="Osoba"
         required
@@ -61,7 +62,7 @@
       ...initialState,
     })
   
-    const Osoba = ['Trenér', 'Rodič', 'Hráč', 'Samouk']
+    const items = ['Trenér', 'Rodič', 'Hráč', 'jiné']
   
     const rules = {
       name: { required },
@@ -81,4 +82,10 @@
       }
     }
   </script>
-  
+  <style>
+  .nadpis{
+    min-height: 100px;
+    text-align: center;
+    background-color: #1A237E;
+   }</style>
+ 

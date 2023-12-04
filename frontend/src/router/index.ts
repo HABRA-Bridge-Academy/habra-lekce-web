@@ -18,12 +18,12 @@ const routes = [
   },
   {
     path: '/login',
-    name: 'Přihlášení',
+    name: 'login',
     component: () => import('@/components/Login.vue'),
   },
   {
     path: '/registration',
-    name: 'Registrace',
+    name: 'register',
     component: () => import('@/components/Registration.vue'),
   }
 ]

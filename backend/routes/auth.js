@@ -4,6 +4,7 @@ const User = require('../models/User');
 var router = express.Router();
 module.exports = router;
 
+const { authenticate } = require('../src/auth');
 const { body, validationResult } = require('express-validator');
 
 const emailValidation = body('email').isEmail().withMessage('invalid-email');
@@ -12,7 +13,7 @@ const firstNameValidation = body('firstName').isLength({ min: 2 }).withMessage('
 const lastNameValidation = body('lastName').isLength({ min: 2 }).withMessage('last-name-too-short');
 
 router.post('/login',
-    passport.authenticate("local", { failWithError: true }),
+    passport.authenticate("local"),
     function (req, res, ) {
         const user = req.user;
         return res.json({ success: true, user });
@@ -34,10 +35,10 @@ router.post("/logout", (req, res, next) => {
     });
 });
 
-router.post("/change-password", [
-    emailValidation,
+router.post("/change-password", 
+    authenticate,
     passwordValidation,
-], async (req, res) => {
+    async (req, res) => {
     
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

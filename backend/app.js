@@ -1,7 +1,6 @@
 
 require("dotenv").config();
 
-const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
@@ -13,7 +12,6 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
 const dbUrl = process.env.DB_URL || "mongodb://localhost:27017";
 require('./src/mongoose').initMongoose(dbUrl);
@@ -29,10 +27,11 @@ app.use('/users', usersRouter);
 app.use('/auth', authRouter);
 app.use('/articles', articlesRouter);
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
+require('./src/apidocs')(app);
+
+
+// Static has to be after all routes
+app.use(express.static(path.join(__dirname, 'public')));
 
 // error handler
 app.use(function(err, req, res) {

@@ -1,17 +1,13 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+require("dotenv").config();
 
-var app = express();
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+const app = express();
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -19,8 +15,19 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
+const dbUrl = process.env.DB_URL || "mongodb://localhost:27017";
+require('./src/mongoose').initMongoose(dbUrl);
+
+const initAuth = require('./src/auth').initAuth;
+initAuth(app);
+
+const usersRouter = require('./routes/users');
+const authRouter = require('./routes/auth');
+const articlesRouter = require('./routes/articles');
+
 app.use('/users', usersRouter);
+app.use('/auth', authRouter);
+app.use('/articles', articlesRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -28,14 +35,13 @@ app.use(function(req, res, next) {
 });
 
 // error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+app.use(function(err, req, res) {
 
-  // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  if ( req.app.get('env') === 'development' )
+    res.send(err);
+  else
+    res.send();
 });
 
 module.exports = app;

@@ -84,9 +84,12 @@ function initAuth(app) {
   });
 }
 
-function authorize() {
+function authorize(roles = []) {
+  if (typeof roles === 'string' || roles instanceof String)
+    roles = [ roles ];
+
   return function (req, res, next) {
-    if (req.user) {
+    if (req.user && (roles.length === 0 || roles.includes(req.user.role))) {
       next();
     } else {
       res.status(401).json({ success: false, code: "not-logged-in" });

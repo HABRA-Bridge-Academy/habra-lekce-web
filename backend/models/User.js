@@ -26,6 +26,12 @@ UserSchema.methods.toJSON = function() {
     return obj
 }
 
+UserSchema.methods.canView = function(article) {
+
+    if(article.public) return true;
+    return this.role !== 'registered';
+}
+
 UserSchema.statics.registerUser = async function(email, password, firstName, lastName) {
 
     // Check if the user already exists and has a password

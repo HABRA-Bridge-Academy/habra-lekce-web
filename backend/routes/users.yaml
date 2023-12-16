@@ -73,6 +73,7 @@ components:
     tags:
       - User Management
     description: Returns a list of users
+    summary: Get all users
     security:
         - sessionAuth: []
     parameters:
@@ -97,6 +98,7 @@ components:
   post:
     tags:
       - User Management
+    summary: Create user
     description: Creates a new user
     requestBody:
       content:
@@ -122,6 +124,7 @@ components:
   get:
     tags:
       - User Management
+    summary: Get user detail
     parameters:
       - in: path
         name: id
@@ -144,6 +147,7 @@ components:
         description: Unauthorized
 
   put:
+    summary: Edit user
     tags:
       - User Management
     parameters:
@@ -175,6 +179,7 @@ components:
       401:
         description: Unauthorized
   delete:
+    summary: Delete user
     tags:
       - User Management
     parameters:

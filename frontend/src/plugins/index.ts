@@ -7,15 +7,15 @@
 // Plugins
 import vuetify from './vuetify'
 import router from '../router'
-import initAxios from './axios'
 
 // Types
 import type { App } from 'vue'
+import { createPinia } from 'pinia'
 
 export function registerPlugins (app: App) {
   app
     .use(vuetify)
     .use(router)
+    .use(createPinia())
 
-  initAxios()
 }

@@ -14,31 +14,36 @@
           <v-col cols="6">
             <v-card>
               <v-card-title class="headline">Registrace</v-card-title>
-              <v-form @submit.prevent="register">
+              <v-form @submit.prevent="submit">
               <v-card-text>
-                  <v-text-field v-model="state.name" :error-messages="v$.name.$errors.map(e => e.$message)"
-                    label="Jméno" required @input="v$.name.$touch" @blur="v$.name.$touch"></v-text-field>
+                  <v-text-field  label="Jméno" name="name" v-model="name" :rules="nameRules" required density="comfortable"
+                    :error-messages="errorMessages.name" @input="errorMessages.name = ''"></v-text-field>
 
-                  <v-text-field v-model="state.surname" :error-messages="v$.name.$errors.map(e => e.$message)"
-                    label="Příjmení" required @input="v$.surname.$touch" @blur="v$.surname.$touch"></v-text-field>
+                  <v-text-field  label="Příjmení" name="surname" v-model="surname" :rules="nameRules" required density="comfortable"
+                    :error-messages="errorMessages.name" @input="errorMessages.surname = ''"></v-text-field>
 
-                  <v-text-field v-model="state.email" :error-messages="v$.email.$errors.map(e => e.$message)"
-                    label="E-mail" required @input="v$.email.$touch" @blur="v$.email.$touch"></v-text-field>
+                  <v-text-field  label="Email" name='Email' v-model="Email" required
+                   density="comfortable" :error-messages="errorMessages.email"
+                    @input="errorMessages.email = ''"></v-text-field>
 
-                  <v-select v-model="state.select" :items="items" :error-messages="v$.select.$errors.map(e => e.$message)"
-                    label="Účel" required @change="v$.select.$touch" @blur="v$.select.$touch"></v-select>
+                  <v-text-field label="Heslo" name='password' type="password" v-model="password" :rules="passwordRules"
+                    density="comfortable" :error-messages="errorMessages.password" @input="errorMessages.password = ''"
+                    required></v-text-field>
 
-                  <v-text-field v-model="state.password" type="password" label="Heslo"
-                    :error-messages="v$.name.$errors.map(e => e.$message)" required></v-text-field>
-
-                  <v-checkbox v-model="state.checkbox" :error-messages="v$.checkbox.$errors.map(e => e.$message)"
-                    label="Do you agree?" required @change="v$.checkbox.$touch" @blur="v$.checkbox.$touch"></v-checkbox>
+                  <v-checkbox v-model="agree" :rules="agreeRules">    <template v-slot:label>
+                    <span>
+                        Souhlasím s obchodními podmínkami a ochranou osobních údajů</span>
+                </template></v-checkbox>
                
               </v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn class="me-4" type="submit" @click="v$.$validate"> submit </v-btn>
-                  <v-btn @click="clear"> clear </v-btn>
+                    <div class="flex-gap">
+                    Máte účet? 
+                    <RouterLink :to="{name: 'login'}" >Přihlaste se</RouterLink></div>
+                    <v-spacer></v-spacer>
+                  <v-spacer></v-spacer>
+                  <v-btn type="submit" > Registrovat </v-btn>
                 </v-card-actions>
               </v-form>
             </v-card>
@@ -49,83 +54,78 @@
   </v-app>
 </template>
   
-<script setup>
+<script setup lang="ts">
 // pridej semka lang="ts" (<script setup lang="ts" >) a pak tu budes mit misto javascriptu typescript,
 // ktery ti bude kontrolovat chyby, ale zase budes muset psat vsechno presneji a obcas ho obchazet
-import { reactive } from 'vue'
-import { useVuelidate } from '@vuelidate/core'
-import { email, required } from '@vuelidate/validators'
-import axios from "@/plugins/axios";
+import { useAuthStore } from '@/stores/auth';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { computed } from 'vue';
-
-const initialState = {
-  name: '',
-  surname:'',
-  email: '',
-  select: null,
-  password: '',
-  checkbox: null,
-}
-
-const state = reactive({
-  ...initialState,
-})
-
-const items = ['Trenér', 'Rodič', 'Hráč', 'jiné']
-
-const rules = {
-  name: { required },
-  surname: {required},
-  email: { required, email },
-  select: { required },
-  items: { required },
-  checkbox: { required },
-}
-
-const v$ = useVuelidate(rules, state)
-
-function clear() {
-  v$.value.$reset()
-
-  for (const [key, value] of Object.entries(initialState)) {
-    state[key] = value
-  }
-}
+import { toast } from "@/plugins/toastify";
 
 
-async function register(){
-  try {
-    alert('jede to')
-    const response = await axios.post('auth/register', {
-      "email": state.email, 
-      "password": state.password,
-      "firstName": state.name,
-      "lastName": state.surname
+
+const authStore = useAuthStore();
+
+const Email =  ref('');
+const surname = ref('');
+const name = ref('');
+const password = ref('');
+const register = ref(false);
+const form = ref(null as HTMLFormElement | null);
+const progress = ref(false);
+
+const agree = ref(false);
+
+const agreeRules = [
+    (v: boolean) => v || 'Musíte souhlasit s obchodními podmínkami a ochranou osobních údajů',
+];
+
+const emailRules = [ 
+    (v: string) => /.+@.+\..+/.test(v) || 'Musí být platný email',
+];
+const nameRules = [
+    (v: string) => v.length >= 5 || 'Zadejte celé jméno',
+    (v: string) => !/\d/.test(v) || 'Zadejte celé jméno',
+];
+
+const passwordRules = [
+    (v: string) => !!v || 'Vyplňte heslo',
+];
+const password2Rules = [
+    (v: string) => !!v || 'Vyplňte heslo znovu',
+    (v: string) => v === password.value || 'Hesla se neshodují',
+];
 
 
-  })
-    console.log(response)
-    router.push({name: 'home'})
-  } catch (e) 
-  {
+
+const errorMessages = ref({} as any);
+const router = useRouter();
+
+const submit = async () => {
+    const res = await form.value?.validate()
     
-    alert("Nastala chyba:" + e.message)    
-  } 
+    try {
+        progress.value = true;
+        await authStore.register( Email.value, password.value, name.value, surname.value);
+        toast("Registrace proběhla úspěšně. Nyní se můžete přihlásit.")
+        router.push({ name: 'login' });
+
+    } catch (error: any) {
+        if (error.response?.status === 401) {
+            errorMessages.value = { password: 'Špatné heslo' };
+        }
+        else if (error.response?.status === 409) {
+            errorMessages.value = { email: 'Uživatel již existuje' };
+        }
+        else {
+            errorMessages.value = { email: 'Nastala chyba' };
+        }
+    } finally {
+        progress.value = false;
+    }
 }
 </script>
 <style>
-.side-collums {
-  display: flex;
-}
-
-.header {
-  text-align: center;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
 
 </style>
  

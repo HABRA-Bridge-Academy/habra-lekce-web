@@ -1,7 +1,11 @@
 
 import axios from 'axios'
 
-export default function init() {
-    axios.defaults.baseURL = "http://api.brizhavirov.cz";
-}
 
+
+export default axios.create({
+    baseURL: "https://api.bridzhavirov.cz",
+    headers: {
+        "Accept": "application/json"
+    }
+})

@@ -1,4 +1,5 @@
 // Composables
+import { useAuthStore } from '@/stores/Auth'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
@@ -20,11 +21,17 @@ const routes = [
     path: '/login',
     name: 'login',
     component: () => import('@/components/Login.vue'),
+    meta:{
+      loggedOut: true
+    }
   },
   {
     path: '/registration',
     name: 'register',
     component: () => import('@/components/Registration.vue'),
+    meta: {
+      loggedOut: true
+    }
   }
 ]
 
@@ -32,5 +39,29 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
 })
+
+router.beforeEach((to, from) => {
+  const userStore = useAuthStore()
+
+  if (to.meta.loggedIn && !userStore.isAuthenticated) {
+    return {
+      name: 'login',
+      query: { redirect: to.fullPath }
+    }
+  }
+
+  if (to.meta.loggedOut && userStore.isAuthenticated) {
+    return {
+      name: 'Home'
+    }
+  }
+
+  if (to.meta.admin && !userStore.isAdmin) {
+    return {
+      name: 'Home'
+    }
+  }
+})
+
 
 export default router

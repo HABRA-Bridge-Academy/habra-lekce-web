@@ -24,6 +24,13 @@ const routes = [
     meta:{
       loggedOut: true
     }
+  },  {
+    path: '/logout',
+    name: 'logout',
+    component: () => import('@/components/Logout.vue'),
+    meta:{
+      loggedOut: false
+    }
   },
   {
     path: '/registration',

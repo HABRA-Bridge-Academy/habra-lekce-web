@@ -57,7 +57,7 @@
 <script setup lang="ts">
 // pridej semka lang="ts" (<script setup lang="ts" >) a pak tu budes mit misto javascriptu typescript,
 // ktery ti bude kontrolovat chyby, ale zase budes muset psat vsechno presneji a obcas ho obchazet
-import { useAuthStore } from '@/stores/auth';
+import { useAuthStore } from '@/stores/Auth';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { toast } from "@/plugins/toastify";

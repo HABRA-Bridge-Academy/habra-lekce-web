@@ -50,7 +50,7 @@ import { email, required } from '@vuelidate/validators'
 import axios from "@/plugins/axios"
 import { useRoute, useRouter } from 'vue-router'
 import { computed } from 'vue'
-import { useAuthStore } from '@/stores/auth'
+import { useAuthStore } from '@/stores/Auth'
 import { Ref, ref } from 'vue'
 
 const form = ref(null as HTMLFormElement | null);

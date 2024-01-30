@@ -8,7 +8,7 @@ const authStore = useAuthStore()
 export async function articleStore(){
             try {
                 const response = await axios.get('/articles');
-                const ArticleList = response.data as Article[];
+                const ArticleList = response.data.items as Article[];
                 console.debug('Articles found:');
                 return ArticleList
             } catch (error: any) {
@@ -47,7 +47,7 @@ export const useArticleStore = defineStore('article', {
             if(this._articles.length > 0) return; // Don't fetch if we already have articles
             try {
                 const response = await axios.get('/articles');
-                this._articles = response.data as Article[];
+                this._articles = response.data.items as Article[];
                 this._articlesByYear = this._articles.filter(a => a.meta && a.meta.year) // filter all articles that have meta.year
                     .reduce((acc: Map<number, Article[]>, article: Article) => { // reduce to an object with the year as key and the articles as value
                         const year = article.meta?.year;
@@ -57,6 +57,8 @@ export const useArticleStore = defineStore('article', {
                     }, new Map<number, Article[]>());
             } catch (error: any) {
                 throw error;
+            } finally {
+                this._loadingArticles = false;
             }
         },
         async getArticles(): Promise<Article[]> {

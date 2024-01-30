@@ -1,5 +1,6 @@
 <template>
     <v-chip>ahaa</v-chip>
+    {{ years }}
 </template>
 
 <script setup lang="ts">
@@ -17,16 +18,15 @@ async function loadArticles() {
     try {
         progress.value = true;
         articlesByYear.value = await articleStore.getArticlesByYear();
-        console.log("jede to")
+        console.log("jede seznam")
     } catch (error: any) {
         console.error("nejede to")
-        console.error(error)
     } finally {
         progress.value = false
     }
 }
 
-const years = computed(()=> articlesByYear.value?.keys())
+const years = computed(()=> [...articlesByYear.value?.keys() ?? []])
 
 function getArticlesForYear(year: number) {
     const articles = articlesByYear.value?.get(year)

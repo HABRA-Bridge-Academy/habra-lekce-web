@@ -1,11 +1,13 @@
 <template>
+    <year-comp></year-comp>
+
     <article v-html="articleContent"></article>
-    {{ articleList }}
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
 import { articleStoreGet, articleStore } from '@/stores/Article';
 import { onMounted } from 'vue';
+import YearComp from '@/components/YearComp.vue'
 
 const articleList = articleStore()
 console.log(articleList)

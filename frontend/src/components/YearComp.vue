@@ -2,7 +2,7 @@
     <v-chip>ahaa</v-chip>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import Article from '@/class/article';
 import {  useArticleStore } from '@/stores/Article';
 import { computed } from 'vue';

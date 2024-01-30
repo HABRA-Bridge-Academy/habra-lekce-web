@@ -58,9 +58,7 @@ export const useArticleStore = defineStore('article', {
                     }, new Map<number, Article[]>());
             } catch (error: any) {
                 throw error;
-            } finally {
-                this._loadingArticles = false;
-            }
+            } 
         },
         async getArticles(): Promise<Article[]> {
             await this.fetchArticles();

@@ -1,6 +1,7 @@
 <template>
-    <v-chip>ahaa</v-chip>
-    {{ years }}
+    <v-list v-if="getArticlesForYear(2)">
+        <v-list-item v-for="article in getArticlesForYear(2)" :title="article.title"></v-list-item>
+    </v-list>
 </template>
 
 <script setup lang="ts">
@@ -25,13 +26,12 @@ async function loadArticles() {
         progress.value = false
     }
 }
-
 const years = computed(()=> [...articlesByYear.value?.keys() ?? []])
 
 function getArticlesForYear(year: number) {
     const articles = articlesByYear.value?.get(year)
     if(!articles) return;
-    const sorted = articles.toSorted(a => a.meta.number);
+    const sorted = articles.toSorted((a,b) =>a.meta.number- b.meta.number);
 
     return sorted;
 }

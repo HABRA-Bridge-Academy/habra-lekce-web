@@ -20,6 +20,7 @@ export async function articleStore(){
 
     // TODO move this to the store below
  export async function articleStoreGet(id: String): Promise<Article> {
+    
         try {
             const response = await axios.get(`/articles/${id}`);
             const a = response.data as Article;

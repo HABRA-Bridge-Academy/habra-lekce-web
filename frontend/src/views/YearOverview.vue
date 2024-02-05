@@ -1,6 +1,7 @@
 <template>
-    <v-list v-if="getArticlesForYear(2)">
-        <v-list-item v-for="article in getArticlesForYear(2)" :title="article.title" :to="article.id"></v-list-item>
+    <h2>{{ year }}. Ročník</h2>
+    <v-list v-if="getArticlesForYear(year)">
+        <v-list-item v-for="article in getArticlesForYear(year)" :title="article.title" :to="{ name: 'article', params: {id: article.id}}"></v-list-item>
     </v-list>
 </template>
 
@@ -14,6 +15,8 @@ const progress = ref(false)
 const articlesByYear = ref(null as Map<number, Article[]> | null)
 
 const articleStore = useArticleStore();
+
+const year = 2; // TODO get from route
 
 async function loadArticles() {
     try {
@@ -34,7 +37,6 @@ function getArticlesForYear(year: number) {
 
     return sorted;
 }
-
 
 onMounted(() => loadArticles())
 

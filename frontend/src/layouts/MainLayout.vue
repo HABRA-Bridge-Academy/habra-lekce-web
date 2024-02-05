@@ -12,12 +12,11 @@
       </div>
       <v-spacer></v-spacer>
     </v-app-bar>
-    <v-navigation-drawer height="100px" v-model="drawer" permanent v-if="auth" 
-          :title=userName>
+    <v-navigation-drawer height="100px" v-model="drawer" permanent v-if="auth" :title=userName>
       <v-list>
         <v-list-item prepend-icon="mdi-view-dashboard" :title=userName></v-list-item>
         <v-list-item prepend-icon="mdi-numeric-1" title="1. Ročník"></v-list-item>
-        <v-list-item prepend-icon="mdi-numeric-2" title="2. Ročník"></v-list-item>
+        <v-list-item prepend-icon="mdi-numeric-2" title="2. Ročník" :to="{ name: 'year-overview', params: { number: 2 } }"></v-list-item>
         <v-list-item prepend-icon="mdi-numeric-3" title="3. Ročník"></v-list-item>
         <v-list-item prepend-icon="mdi-numeric-4" title="4. Ročník"></v-list-item>
         <v-list-item prepend-icon="mdi-numeric-5" title="5. Ročník"></v-list-item>

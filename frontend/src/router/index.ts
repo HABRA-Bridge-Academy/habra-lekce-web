@@ -10,26 +10,17 @@ const routes = [
       {
         path: '',
         name: 'Home',
-        // route level code-splitting
-        // this generates a separate chunk (Home-[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
         component: () => import('@/views/Home.vue'),
-      },   {
-        path: '/:id',
-        name: ':id',
-        // route level code-splitting
-        // this generates a separate chunk (Home-[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () => import('@/views/Home.vue'),
+      },
+      {
+        path: 'rocnik/:number',
+        name: 'year-overview',
+        component: () => import('@/views/YearOverview.vue'),
       },
       {
         path: 'clanek/:id',
         name: 'article',
-        // route level code-splitting
-        // this generates a separate chunk (Home-[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () => import('@/views/Home.vue'),
-
+        component: () => import('@/views/Article.vue'),
       },
     ],
   },

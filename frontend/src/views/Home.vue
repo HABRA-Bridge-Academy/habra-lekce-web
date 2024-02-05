@@ -1,5 +1,6 @@
 <template>
   <ArticleComp />
+  <Yearcomp />
   <HelloWorld />
 
 </template>
@@ -8,6 +9,7 @@ import { ref } from 'vue';
 import ArticleComp from '@/components/articleComp.vue';
 import Yearcomp from '@/components/YearComp.vue';
 import HelloWorld from '@/components/HelloWorld.vue'
-
-const lekce2 = ref(false)
+ 
+ 
+const lekce = ref()
 </script> 

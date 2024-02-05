@@ -5,13 +5,15 @@
 import { ref } from 'vue';
 import { articleStoreGet, articleStore } from '@/stores/Article';
 import { onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 
+const route = useRoute() 
 const progress = ref(false)
 const articleContent = ref(null as string | null)
-const articleId = ref(String )
-
+const articleId = (String(route.params.id))
+ 
 async function loadArticle(id: string|null) {
-    if (id !== null)
+    if (id == null)
         id = "65acfd0ca119d1e72324bc8c" 
     try {
         progress.value = true;
@@ -22,7 +24,8 @@ async function loadArticle(id: string|null) {
         progress.value = false
     }
 }
-onMounted(() => loadArticle("articleId"))
+
+loadArticle(articleId)
 
 
 </script>

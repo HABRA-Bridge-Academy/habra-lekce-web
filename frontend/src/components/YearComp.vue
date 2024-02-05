@@ -1,6 +1,6 @@
 <template>
     <v-list v-if="getArticlesForYear(2)">
-        <v-list-item v-for="article in getArticlesForYear(2)" :title="article.title"></v-list-item>
+        <v-list-item v-for="article in getArticlesForYear(2)" :title="article.title" :to="article.id"></v-list-item>
     </v-list>
 </template>
 
@@ -19,9 +19,8 @@ async function loadArticles() {
     try {
         progress.value = true;
         articlesByYear.value = await articleStore.getArticlesByYear();
-        console.log("jede seznam")
     } catch (error: any) {
-        console.error("nejede to")
+        console.error
     } finally {
         progress.value = false
     }

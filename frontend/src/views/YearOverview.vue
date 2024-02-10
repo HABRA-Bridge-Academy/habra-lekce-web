@@ -1,7 +1,7 @@
 <template>
     <h2>{{ year }}. Ročník</h2>
-    <v-list v-if="getArticlesForYear(year)">
-        <v-list-item v-for="article in getArticlesForYear(year)" :title="article.title" :to="{ name: 'article', params: {id: article.id}}"></v-list-item>
+    <v-list v-if="articles">
+        <v-list-item v-for="article in articles" :title="article.title" :to="{ name: 'article', params: {id: article.id}}"></v-list-item>
     </v-list>
 </template>
 
@@ -10,13 +10,15 @@ import Article from '@/class/article';
 import {  useArticleStore } from '@/stores/Article';
 import { computed } from 'vue';
 import { onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
 
+const route = useRoute()
 const progress = ref(false) 
 const articlesByYear = ref(null as Map<number, Article[]> | null)
 
 const articleStore = useArticleStore();
 
-const year = 2; // TODO get from route
+const year = computed(() => Number.parseInt(route.params.number as string)); // TODO get from route
 
 async function loadArticles() {
     try {
@@ -28,7 +30,7 @@ async function loadArticles() {
         progress.value = false
     }
 }
-const years = computed(()=> [...articlesByYear.value?.keys() ?? []])
+
 
 function getArticlesForYear(year: number) {
     const articles = articlesByYear.value?.get(year)
@@ -37,6 +39,8 @@ function getArticlesForYear(year: number) {
 
     return sorted;
 }
+
+const articles = computed(() => getArticlesForYear(year.value))
 
 onMounted(() => loadArticles())
 

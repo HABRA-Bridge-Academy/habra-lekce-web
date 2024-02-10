@@ -12,17 +12,10 @@
       </div>
       <v-spacer></v-spacer>
     </v-app-bar>
-    <v-navigation-drawer height="100px" v-model="drawer" permanent v-if="auth" :title=userName>
-      <v-list>
+    <v-navigation-drawer v-model="drawer" permanent absolute v-if="auth" :title=userName>
+      <v-list>  
         <v-list-item prepend-icon="mdi-view-dashboard" :title=userName></v-list-item>
-        <v-list-item prepend-icon="mdi-numeric-1" title="1. Ročník"></v-list-item>
-        <v-list-item prepend-icon="mdi-numeric-2" title="2. Ročník" :to="{ name: 'year-overview', params: { number: 2 } }"></v-list-item>
-        <v-list-item prepend-icon="mdi-numeric-3" title="3. Ročník"></v-list-item>
-        <v-list-item prepend-icon="mdi-numeric-4" title="4. Ročník"></v-list-item>
-        <v-list-item prepend-icon="mdi-numeric-5" title="5. Ročník"></v-list-item>
-        <v-list-item prepend-icon="mdi-numeric-6" title="6. Ročník"></v-list-item>
-        <v-list-item prepend-icon="mdi-numeric-7" title="7. Ročník"></v-list-item>
-        <v-list-item prepend-icon="mdi-numeric-8" title="8. Ročník"></v-list-item>
+        <v-list-item v-for="year in years" :prepend-icon="'mdi-numeric-' + year" :title="year + '. Ročník'" :to="{ name: 'year-overview', params: { number: year } }"></v-list-item>
       </v-list>
 
       <v-list-item prepend-icon="mdi-logout" title="Odhlasit se" :to="{ name: 'logout' }"></v-list-item>
@@ -35,9 +28,12 @@
   </v-app>
 </template>
 <script lang="ts" setup>
+import Article from '@/class/article';
 import router from '@/router';
+import { useArticleStore } from '@/stores/Article';
 import { useAuthStore } from '@/stores/Auth';
 import { and } from '@vuelidate/validators';
+import { computed, onMounted } from 'vue';
 import { ref } from 'vue'
 
 
@@ -47,6 +43,22 @@ const userName = userStore.user?.firstName.concat(" ", userStore.user?.lastName,
 const drawer = ref(true)
 const rail = ref(true)
 
+
+
+const years = computed(()=> [...articlesByYear.value?.keys() ?? []])
+const articlesByYear = ref(null as Map<number, Article[]> | null)
+
+const articleStore = useArticleStore();
+onMounted(loadArticles)
+
+async function loadArticles() {
+    try {
+        articlesByYear.value = await articleStore.getArticlesByYear();
+    } catch (error: any) {
+        console.error
+    } finally {
+    }
+}
 
 </script>
 

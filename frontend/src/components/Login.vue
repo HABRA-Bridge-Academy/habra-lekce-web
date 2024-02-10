@@ -44,14 +44,11 @@
 <script setup lang="ts">
 // pridej semka lang="ts" (<script setup lang="ts" >) a pak tu budes mit misto javascriptu typescript,
 // ktery ti bude kontrolovat chyby, ale zase budes muset psat vsechno presneji a obcas ho obchazet
-import { reactive } from 'vue'
-import { useVuelidate } from '@vuelidate/core'
-import { email, required } from '@vuelidate/validators'
-import axios from "@/plugins/axios"
+
 import { useRoute, useRouter } from 'vue-router'
-import { computed } from 'vue'
+
 import { useAuthStore } from '@/stores/Auth'
-import { Ref, ref } from 'vue'
+import { ref } from 'vue'
 
 const form = ref(null as HTMLFormElement | null);
 const authStore = useAuthStore()
@@ -61,10 +58,6 @@ const route = useRoute()
 
 const Email = ref('');
 const password = ref('');
-const valid = ref(null);
-
-
-
 
 // Promises
 

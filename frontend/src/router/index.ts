@@ -13,13 +13,18 @@ const routes = [
         component: () => import('@/views/Home.vue'),
       },
       {
-        path: 'rocnik/:number',
+        path: 'rocnik/:year',
         name: 'year-overview',
         component: () => import('@/views/YearOverview.vue'),
       },
       {
         path: 'clanek/:id',
         name: 'article',
+        component: () => import('@/views/Article.vue'),
+      },
+      {
+        path: 'rocnik/:year/clanek/:id',
+        name: 'lesson',
         component: () => import('@/views/Article.vue'),
       },
     ],

@@ -1,0 +1,262 @@
+.lekce {
+    @import "./common.scss";
+}
+
+
+
+* {
+    box-sizing: border-box;
+}
+
+/* VIDEOS AND BM */
+
+.lesson-video iframe {
+    height: 360px;
+    width: 640px;
+}
+
+.bm-container iframe {
+    height: 540px;
+    border: 0;
+}
+
+.lesson-video-container {
+    margin-bottom: 1em;
+}
+
+.lesson-video,
+.bm-container {
+    margin: 1em 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+/* BASIC ELEMENTS */
+
+.lekce table:not(.distribution *):not(.distribution):not(.bidding *) {
+    margin-top: 1em;
+}
+
+.lekce table:not(.distribution *):not(.distribution):not(.bidding *) td {
+    padding: 2px 4px;
+}
+
+.lekce ol {
+    padding: revert;
+
+    li {
+        list-style-type: numeric;
+    }
+}
+
+.lekce ol.seznam-lekci,
+.lekce .literature ol {
+    padding: 0;
+
+    li {
+        list-style-type: none;
+    }
+}
+
+.columns {
+    margin-top: 1em;
+    display: flex;
+    gap: 4em;
+    flex-wrap: wrap;
+
+    & > * {
+        max-width: 25%;
+    }
+}
+
+.lekce {
+    padding-bottom: 2em;
+}
+
+.blur {
+    filter: blur(5px) grayscale(1);
+    cursor: pointer;
+
+    &::before {
+        content: "aa";
+    }
+}
+
+/* SEZNAM LEKCI */
+
+.lekce .seznam-lekci {
+    margin-top: 1em;
+}
+
+.seznam-lekci {
+    list-style-type: none;
+}
+
+.content .seznam-lekci .lekce-tlacitko {
+    margin-bottom: 5px;
+    display: block;
+    border: solid 2px black;
+    border-radius: 10px;
+    text-align: left;
+}
+
+.content .seznam-lekci .lekce-tlacitko a {
+    font-weight: bold;
+    display: block;
+    padding-left: 10px;
+    font-size: 14px;
+    line-height: 30px;
+    margin-top: 0px;
+    text-decoration: none;
+}
+
+.panel .seznam-lekci .lekce-tlacitko {
+    border: solid 2px black;
+    border-radius: 6px;
+    margin: 4px 10px;
+}
+
+.panel .seznam-lekci .lekce-tlacitko-aktivni {
+    background-color: #b9d3ee;
+}
+
+.panel .seznam-lekci .lekce-tlacitko a {
+    color: black;
+    font-size: 0.8em;
+    display: block;
+    padding: 4px 6px;
+    text-decoration: none;
+}
+
+/* DISTRIBUTION, CARDS AND CONTRACTS */
+
+.distribution {
+    margin-top: 1em;
+}
+
+.distribution-suit-hand-dummy {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.distribution-hand-dummy {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.distribution-ew {
+    display: flex;
+    gap: 1em;
+}
+
+.inline-hand {
+    display: inline-flex;
+    gap: 4px;
+}
+
+/* */
+
+.card,
+.contract {
+    display: inline-flex;
+}
+
+/* AUCTION */
+.lekce .auction-nsew {
+    grid-template-columns: 50px 50px 50px 50px;
+}
+
+/* bidding */
+
+
+
+.bidding:not(.bidding .bidding) {
+    margin-top: 2em;
+}
+
+.bidding-table {
+
+
+    p {
+        margin-top: 0;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+
+    & > div:not(.action-only) {
+        display: table-row;
+
+        & > div.action {
+            padding-right: 1em !important;
+            vertical-align: top;
+            max-width: 200px;
+            padding-bottom: 2px;
+        }
+
+        & > div {
+            display: table-cell;
+        }
+    }
+}
+
+
+/* */
+.bid{
+    display: inline-flex;
+}
+
+.reveal-button {
+    appearance: none;
+    border: none;
+    background: inherit;
+    font: inherit;
+    cursor: pointer;
+}
+
+.reveal-controls {
+    margin-top: 4px;
+    gap: 2px;
+    display: flex;
+    justify-content: center;
+}
+
+/* ICONS */
+
+.gg-eye {
+    position: relative;
+    display: block;
+    transform: scale(var(--ggs, 1));
+    width: 24px;
+    height: 18px;
+    border-bottom-right-radius: 100px;
+    border-bottom-left-radius: 100px;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.gg-eye::after,
+.gg-eye::before {
+    content: "";
+    display: block;
+    border-radius: 100px;
+    position: absolute;
+    box-sizing: border-box;
+}
+
+.gg-eye::after {
+    top: 2px;
+    box-shadow: inset 0 -8px 0 2px, inset 0 0 0 2px;
+    width: 24px;
+    height: 24px;
+}
+
+.gg-eye::before {
+    width: 8px;
+    height: 8px;
+    border: 2px solid;
+    bottom: 4px;
+    left: 8px;
+}

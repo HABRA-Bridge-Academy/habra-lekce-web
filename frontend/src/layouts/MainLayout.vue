@@ -15,7 +15,7 @@
     <v-navigation-drawer v-model="drawer" permanent absolute v-if="auth" :title=userName>
       <v-list>  
         <v-list-item prepend-icon="mdi-view-dashboard" :title=userName></v-list-item>
-        <v-list-item v-for="year in years" :prepend-icon="'mdi-numeric-' + year" :title="year + '. Ročník'" :to="{ name: 'year-overview', params: { number: year } }"></v-list-item>
+        <v-list-item v-for="year in years" :active="activeYear === year" :prepend-icon="'mdi-numeric-' + year" :title="year + '. Ročník'" :to="{ name: 'year-overview', params: {  year } }"></v-list-item>
       </v-list>
 
       <v-list-item prepend-icon="mdi-logout" title="Odhlasit se" :to="{ name: 'logout' }"></v-list-item>
@@ -29,20 +29,18 @@
 </template>
 <script lang="ts" setup>
 import Article from '@/class/article';
-import router from '@/router';
 import { useArticleStore } from '@/stores/Article';
 import { useAuthStore } from '@/stores/Auth';
-import { and } from '@vuelidate/validators';
 import { computed, onMounted } from 'vue';
 import { ref } from 'vue'
+import { useRoute } from 'vue-router';
 
 
 const userStore = useAuthStore()
 const auth = userStore.isAuthenticated
 const userName = userStore.user?.firstName.concat(" ", userStore.user?.lastName, " - Přihlášen")
 const drawer = ref(true)
-const rail = ref(true)
-
+const route = useRoute()
 
 
 const years = computed(()=> [...articlesByYear.value?.keys() ?? []])
@@ -50,6 +48,8 @@ const articlesByYear = ref(null as Map<number, Article[]> | null)
 
 const articleStore = useArticleStore();
 onMounted(loadArticles)
+
+const activeYear = computed(() =>  route.params.year ? Number.parseInt( route.params.year as string) : undefined)
 
 async function loadArticles() {
     try {
@@ -66,6 +66,9 @@ async function loadArticles() {
 .container {
   display: flex;
   gap: 15px;
+}
+.xy{
+  background-color: bisque;
 }
 </style>
 

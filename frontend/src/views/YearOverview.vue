@@ -1,7 +1,7 @@
 <template>
     <h2>{{ year }}. Ročník</h2>
     <v-list v-if="articles">
-        <v-list-item v-for="article in articles" :title="article.title" :to="{ name: 'article', params: {id: article.id}}"></v-list-item>
+        <v-list-item v-for="article in articles" :title="article.title" :to="{ name: 'lesson', params: {id: article.id}}"></v-list-item>
     </v-list>
 </template>
 
@@ -18,7 +18,7 @@ const articlesByYear = ref(null as Map<number, Article[]> | null)
 
 const articleStore = useArticleStore();
 
-const year = computed(() => Number.parseInt(route.params.number as string)); // TODO get from route
+const year = computed(() => Number.parseInt(route.params.year as string)); // TODO get from route
 
 async function loadArticles() {
     try {

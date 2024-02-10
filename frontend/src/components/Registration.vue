@@ -70,7 +70,6 @@ const Email =  ref('');
 const surname = ref('');
 const name = ref('');
 const password = ref('');
-const register = ref(false);
 const form = ref(null as HTMLFormElement | null);
 const progress = ref(false);
 

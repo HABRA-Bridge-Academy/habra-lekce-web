@@ -1,5 +1,5 @@
 <template>
-    <article v-html="articleContent"></article>
+    <div class="content lekce" v-html="articleContent"></div>
 </template>
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
@@ -26,3 +26,6 @@ async function loadArticle(id: string | undefined) {
     }
 }
 </script>
+<style lang="scss">
+@import "@/Styles/web.scss";
+</style>

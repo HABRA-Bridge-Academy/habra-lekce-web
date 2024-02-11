@@ -16,17 +16,23 @@ const routes = [
         path: 'rocnik/:year',
         name: 'year-overview',
         component: () => import('@/views/YearOverview.vue'),
+        meta:{
+          loggedIn: true}
       },
       {
         path: 'clanek/:id',
         name: 'article',
         component: () => import('@/views/Article.vue'),
-      },
+        meta:{
+          loggedIn: true}
+          },
       {
         path: 'rocnik/:year/clanek/:id',
         name: 'lesson',
         component: () => import('@/views/Article.vue'),
-      },
+        meta:{
+          loggedIn: true}
+        },
     ],
   },
   {
@@ -41,7 +47,7 @@ const routes = [
     name: 'logout',
     component: () => import('@/components/Logout.vue'),
     meta:{
-      loggedOut: false
+      loggedIn: true
     }
   },
   {

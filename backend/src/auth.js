@@ -24,6 +24,13 @@ function initAuth(app) {
   app.use(passport.initialize());
   app.use(passport.session());
 
+  app.use((req, res, next) => {
+    if (!req.isAuthenticated() && req.cookies?.['connect.sid']) {
+      req.sessionExpired = true;
+    }
+    return next();
+  });
+
   passport.use(
     "local",
     new LocalStrategy(
@@ -86,9 +93,14 @@ function initAuth(app) {
 
 function authorize(roles = []) {
   if (typeof roles === 'string' || roles instanceof String)
-    roles = [ roles ];
+    roles = [roles];
 
   return function (req, res, next) {
+
+    if (req.sessionExpired) {
+      return res.status(419).json({ success: false, code: "session-expired" });
+    }
+
     if (req.user && (roles.length === 0 || roles.includes(req.user.role))) {
       next();
     } else {

@@ -23,6 +23,8 @@ const usersRouter = require('./routes/users');
 const authRouter = require('./routes/auth');
 const articlesRouter = require('./routes/articles');
 
+
+
 app.use('/users', usersRouter);
 app.use('/auth', authRouter);
 app.use('/articles', articlesRouter);

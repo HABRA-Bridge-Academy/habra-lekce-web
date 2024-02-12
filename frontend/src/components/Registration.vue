@@ -11,7 +11,7 @@
     <v-main>
       <v-container class="fill-height">
         <v-row justify="center" class="fill-height">
-          <v-col cols="6">
+          <v-col cols="12" sm="8">
             <v-card>
               <v-card-title class="headline">Registrace</v-card-title>
               <v-form @submit.prevent="submit">

@@ -11,12 +11,12 @@
         <v-main>
           <v-container class="fill-height">
             <v-row justify="center" class="fill-height">
-              <v-col cols="6">
+              <v-col cols="12" sm="8">
                 <v-card>
                   <v-card-title class="headline">Odhlášení</v-card-title>
                   <v-form @submit.prevent="submit">
                   <v-card-text>
-                      <v-text-field  label="Zpětná vazba"></v-text-field>                      
+                      <v-text-field  label="Zpětná vazba" v-model="opinion"></v-text-field>                      
                       </v-card-text>
                       <v-card-actions>
                         <v-spacer></v-spacer>
@@ -45,6 +45,7 @@
     import { useAuthStore } from '@/stores/Auth'
 import { toast } from '@/plugins/toastify'
     
+    const opinion = ref(null as string|null)
     const form = ref(null as HTMLFormElement | null);
     const authStore = useAuthStore()
     const router = useRouter()
@@ -56,6 +57,8 @@ const submit = async () => {
         progress.value = true;
         await authStore.logout( );
         toast("Odhlášení proběhlo úspěšně.")
+        if(opinion !==null)
+          toast("Omlouváme se, vaše zpětná vazba bohužel nebyla zaznamenána, obraťte se na nás prosím jiným způsobem")
         router.push({ name: 'Home' });
 
     } catch (error: any) {        }

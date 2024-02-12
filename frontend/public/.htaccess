@@ -1,10 +1,9 @@
 
 RewriteEngine On
-RewriteBase /
 
-# Redirect HTTP to HTTPS
 RewriteCond %{HTTPS} off
-RewriteRule ^domains(/.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+RewriteRule (.*) https://%{SERVER_NAME}/$1 [R=301,L]
+Header set Content-Security-Policy "upgrade-insecure-requests;"
 
 # Redirect all non-file requests to index.html
 RewriteCond %{REQUEST_FILENAME} !-f

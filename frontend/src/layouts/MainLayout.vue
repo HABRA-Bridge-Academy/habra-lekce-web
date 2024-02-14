@@ -38,7 +38,7 @@
       <v-row>
         <v-col class="center">
           <span>
-            &copy; {{ new Date().getFullYear() }} Havířovská Bridžová Akademie
+            &copy; {{ new Date().getFullYear() }} Bridžový Spolek Havířov
           </span>
           <router-link :to="{name: 'privacy-policy'}">Podmínky ochrany osobních údajů</router-link>
         </v-col>
@@ -108,6 +108,11 @@ body .v-navigation-drawer__content {
 
 .v-main {
   min-height: 90%;
+}
+
+.v-footer span, .v-footer a {
+  color: rgb(119, 119, 119);
+  text-decoration: none;
 }
 </style>
 

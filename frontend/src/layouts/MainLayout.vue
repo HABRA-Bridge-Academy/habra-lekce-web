@@ -24,7 +24,6 @@
           <v-list-item prepend-icon="mdi-logout" title="Odhlásit se" :to="{ name: 'logout' }"></v-list-item>
         </v-list>
       </div>
-
     </v-navigation-drawer>
     <v-main>
       <v-container>
@@ -35,6 +34,16 @@
         </v-row>
       </v-container>
     </v-main>
+    <v-footer>
+      <v-row>
+        <v-col class="center">
+          <span>
+            &copy; {{ new Date().getFullYear() }} Havířovská Bridžová Akademie
+          </span>
+          <router-link :to="{name: 'privacy-policy'}">Podmínky ochrany osobních údajů</router-link>
+        </v-col>
+      </v-row>
+    </v-footer>
   </v-app>
 </template>
 <script lang="ts" setup>
@@ -88,6 +97,17 @@ body .v-navigation-drawer__content {
 .sticky {
   position: sticky;
   top: 0;
+}
+
+.center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.v-main {
+  min-height: 90%;
 }
 </style>
 

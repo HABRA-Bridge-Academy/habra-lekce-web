@@ -18,6 +18,11 @@ const routes = [
         component: () => import('@/views/Home.vue'),
       },
       {
+        path: 'podminky-ochrany-osobnich-udaju',
+        name: 'privacy-policy',
+        component: () => import('@/views/PrivacyPolicy.vue'),
+      },
+      {
         path: 'rocnik/:year',
         name: 'year-overview',
         component: () => import('@/views/YearOverview.vue'),

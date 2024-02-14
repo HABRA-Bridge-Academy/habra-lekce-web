@@ -13,7 +13,7 @@ const routes = [
         component: () => import('@/views/Frontpage.vue'),
       },
       {
-        path: '/home',
+        path: '/domu',
         name: 'home',
         component: () => import('@/views/Home.vue'),
       },
@@ -46,14 +46,14 @@ const routes = [
     ],
   },
   {
-    path: '/login',
+    path: '/prihlaseni',
     name: 'login',
     component: () => import('@/components/Login.vue'),
     meta:{
       loggedOut: true
     }
   },  {
-    path: '/logout',
+    path: '/odhlaseni',
     name: 'logout',
     component: () => import('@/components/Logout.vue'),
     meta:{
@@ -61,7 +61,7 @@ const routes = [
     }
   },
   {
-    path: '/registration',
+    path: '/registrace',
     name: 'register',
     component: () => import('@/components/Registration.vue'),
     meta: {

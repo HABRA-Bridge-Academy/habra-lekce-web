@@ -11,7 +11,7 @@
     <v-main>
       <v-container class="fill-height">
         <v-row justify="center" class="fill-height">
-          <v-col cols="12" sm="8">
+          <v-col cols="12" sm="8" md="5">
             <v-card>
               <v-card-title class="headline">Přihlášení</v-card-title>
               <v-form @submit.prevent="submit">
@@ -84,7 +84,7 @@ const submit = async () => {
     
     if (route.query.redirect)
         router.push(route.query.redirect as string);
-    else router.push({ name: 'Home' });
+    else router.push({ name: 'home' });
   } catch (error: any) {
   
     
@@ -113,6 +113,12 @@ const submit = async () => {
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+.v-card-text {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 </style>

@@ -1,7 +1,7 @@
 <template>
     <h2>{{ year }}. Ročník</h2>
     <v-list v-if="articles">
-        <v-list-item v-for="article in articles" :title="article.title" :to="{ name: 'lesson', params: {id: article.id, year: year}}"></v-list-item>
+        <v-list-item v-for="article in articles" :title="article.meta.number + '. lekce: ' + article.title" :to="{ name: 'lesson', params: {id: article.id, year: year}}"></v-list-item>
     </v-list>
 </template>
 

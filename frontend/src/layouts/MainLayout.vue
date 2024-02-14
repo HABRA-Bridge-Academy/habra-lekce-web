@@ -17,8 +17,8 @@
     <v-navigation-drawer absolute v-model="drawer" v-if="auth" :temporary="mobile" :title=userName>
       <div class="sticky">
         <v-list class="nav-list">
-          <v-list-item prepend-icon="mdi-view-dashboard" :title=userName subtitle="přihlášen"></v-list-item>
-          <v-list-item prepend-icon="mdi-home" title="Home" :to="{ name: 'Home' }"></v-list-item>
+          <v-list-item prepend-icon="mdi-view-dashboard" :title=userName subtitle="Přihlášen"></v-list-item>
+          <v-list-item prepend-icon="mdi-home" title="Domů" :to="{ name: 'home' }"></v-list-item>
           <v-list-item v-for="year in years" :active="activeYear === year" :prepend-icon="'mdi-numeric-' + year"
             :title="year + '. Ročník'" :to="{ name: 'year-overview', params: { year } }"></v-list-item>
           <v-list-item prepend-icon="mdi-logout" title="Odhlásit se" :to="{ name: 'logout' }"></v-list-item>

@@ -11,7 +11,7 @@
         <v-main>
           <v-container class="fill-height">
             <v-row justify="center" class="fill-height">
-              <v-col cols="12" sm="8">
+              <v-col cols="12" sm="8" md="5">
                 <v-card>
                   <v-card-title class="headline">Odhlášení</v-card-title>
                   <v-form @submit.prevent="submit">
@@ -22,7 +22,7 @@
                         <v-spacer></v-spacer>
                         <div class="flex-gap">
                             Jste si jisti, že se chcete odhlásit?
-                        <RouterLink :to="{name: 'Home'}" >Zpátky</RouterLink></div>
+                        <RouterLink :to="{name: 'home'}" >Zpátky</RouterLink></div>
                         <v-spacer></v-spacer>
                         <v-btn class="me-4" type="submit" :disabled="progress"> Ano </v-btn>
                         <v-spacer></v-spacer>
@@ -59,7 +59,7 @@ const submit = async () => {
         toast("Odhlášení proběhlo úspěšně.")
         if(opinion !==null)
           toast("Omlouváme se, vaše zpětná vazba bohužel nebyla zaznamenána, obraťte se na nás prosím jiným způsobem")
-        router.push({ name: 'Home' });
+        router.push({ name: 'frontpage' });
 
     } catch (error: any) {        }
      finally {

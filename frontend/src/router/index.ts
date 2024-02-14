@@ -8,8 +8,13 @@ const routes = [
     component: () => import('@/layouts/MainLayout.vue'),
     children: [
       {
+        path: '',
+        name: 'front',
+        component: () => import('@/views/Frontpage.vue'),
+      },
+      {
         path: '/home',
-        name: 'Home',
+        name: 'home',
         component: () => import('@/views/Home.vue'),
       },
       {

@@ -30,7 +30,10 @@
                     density="comfortable" :error-messages="errorMessages.password" @input="errorMessages.password = ''"
                     required></v-text-field>
 
-                  <v-checkbox v-model="agree" :rules="agreeRules" label="Souhlasím s podmínkami ochrany osobních údajů">
+                  <v-checkbox v-model="agree" :rules="agreeRules">
+                    <template v-slot:label>
+                      <span> Souhlasím s <RouterLink :to="{name: 'privacy-policy'}">Podmínkami ochrany osobních údajů</RouterLink></span>
+                    </template>
                   </v-checkbox>
 
                 </v-card-text>

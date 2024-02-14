@@ -9,7 +9,7 @@ const routes = [
     children: [
       {
         path: '',
-        name: 'front',
+        name: 'frontpage',
         component: () => import('@/views/Frontpage.vue'),
       },
       {

@@ -1,0 +1,78 @@
+
+services:
+  mongo:
+    image: mongo
+    restart: always
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  backend:
+    build: ./backend
+    restart: always
+    environment:
+      - NODE_ENV=development
+      - ENV=development
+      - MONGO_URL=mongodb://mongo:27017/habra
+      - PORT=3004
+      - LOG_FILE=/var/log/habra-lekce.log
+      - LOG_LEVEL=debug
+      - SECRET=trumpisgay
+    depends_on:
+      mongo:
+        condition: service_healthy
+    volumes:
+      - ./backend:/usr/src/app
+      - /usr/src/app/node_modules
+
+  create-admin-user:
+    build: ./backend
+    command: node bin/createAdminUser
+    depends_on:
+      backend:
+        condition: service_started
+    environment:
+      - NODE_ENV=development
+      - ENV=development
+      - MONGO_URL=mongodb://mongo:27017/habra
+      - SECRET=trumpisgay
+      - ADMIN_PASSWORD=admin
+      - ADMIN_EMAIL=admin
+    volumes:
+      - ./backend:/usr/src/app
+      - /usr/src/app/node_modules
+
+  frontend:
+    build: ./frontend
+    environment:
+      - API_URL=http://backend:3004
+      - VITE_API_URL=/api/v1
+      - VITE_BASE_URL=http://localhost:8081
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./frontend:/usr/src/app
+      - /usr/src/app/node_modules
+
+  # test:
+  #   build: ./backend
+  #   environment:
+  #     - NODE_ENV=test
+  #     - MONGO_URL=mongodb://mongo:27017/matrika
+  #     - DB_URL=mysql://matrika:matrika@mysql:3306/matrika
+  #   depends_on:
+  #     mongo:
+  #       condition: service_healthy
+  #     mysql:
+  #       condition: service_healthy
+  #   command: npm run test  --inspect-brk=0.0.0.0
+  #   ports:
+  #     - "9229:9229"
+  #   volumes:
+  #     - ./backend:/usr/src/app
+  #     - /usr/src/app/node_modules
+
+volumes:
+  mongo-data:

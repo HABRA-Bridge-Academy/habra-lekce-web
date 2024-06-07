@@ -1,102 +1,114 @@
 // Composables
-import { useAuthStore } from '@/stores/Auth'
-import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from "@/stores/Auth";
+import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
   {
-    path: '/',
-    component: () => import('@/layouts/MainLayout.vue'),
+    path: "/",
+    component: () => import("@/layouts/MainLayout.vue"),
     children: [
       {
-        path: '',
-        name: 'frontpage',
-        component: () => import('@/views/Frontpage.vue'),
+        path: "",
+        name: "frontpage",
+        component: () => import("@/views/Frontpage.vue")
       },
       {
-        path: '/domu',
-        name: 'home',
-        component: () => import('@/views/Home.vue'),
+        path: "/domu",
+        name: "home",
+        component: () => import("@/views/Home.vue"),
       },
       {
-        path: 'podminky-ochrany-osobnich-udaju',
-        name: 'privacy-policy',
-        component: () => import('@/views/PrivacyPolicy.vue'),
+        path: "podminky-ochrany-osobnich-udaju",
+        name: "privacy-policy",
+        component: () => import("@/views/PrivacyPolicy.vue"),
       },
       {
-        path: 'rocnik/:year',
-        name: 'year-overview',
-        component: () => import('@/views/YearOverview.vue'),
-        meta:{
-          loggedIn: true}
-      },
-      {
-        path: 'clanek/:id',
-        name: 'article',
-        component: () => import('@/views/Article.vue'),
-        meta:{
-          loggedIn: true}
-          },
-      {
-        path: 'rocnik/:year/clanek/:id',
-        name: 'lesson',
-        component: () => import('@/views/Article.vue'),
-        meta:{
-          loggedIn: true}
+        path: "rocnik/:year",
+        name: "year-overview",
+        component: () => import("@/views/YearOverview.vue"),
+        meta: {
+          loggedIn: true,
         },
+      },
+      {
+        path: "clanek/:id",
+        name: "article",
+        component: () => import("@/views/Article.vue"),
+        meta: {
+          loggedIn: true,
+        },
+      },
+      {
+        path: "rocnik/:year/clanek/:id",
+        name: "lesson",
+        component: () => import("@/views/Article.vue"),
+        meta: {
+          loggedIn: true,
+        },
+      },
+      {
+        path: "vitejte",
+        name: "registered-user-info",
+        component: () => import("@/views/RegisteredUserInfoblock.vue"),
+        meta: {
+          loggedIn: true,
+        },
+      },
     ],
   },
   {
-    path: '/prihlaseni',
-    name: 'login',
-    component: () => import('@/components/Login.vue'),
-    meta:{
-      loggedOut: true
-    }
-  },  {
-    path: '/odhlaseni',
-    name: 'logout',
-    component: () => import('@/components/Logout.vue'),
-    meta:{
-      loggedIn: true
-    }
+    path: "/prihlaseni",
+    name: "login",
+    component: () => import("@/components/Login.vue"),
+    meta: {
+      loggedOut: true,
+    },
   },
   {
-    path: '/registrace',
-    name: 'register',
-    component: () => import('@/components/Registration.vue'),
+    path: "/odhlaseni",
+    name: "logout",
+    component: () => import("@/components/Logout.vue"),
     meta: {
-      loggedOut: true
-    }
-  }
-]
+      loggedIn: true,
+    },
+  },
+  {
+    path: "/registrace",
+    name: "register",
+    component: () => import("@/components/Registration.vue"),
+    meta: {
+      loggedOut: true,
+    },
+  },
+];
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(import.meta.VITE_BASE_URL),
   routes,
-})
+});
 
 router.beforeEach((to, from) => {
-  const userStore = useAuthStore()
+  const userStore = useAuthStore();
 
   if (to.meta.loggedIn && !userStore.isAuthenticated) {
     return {
-      name: 'login',
-      query: { redirect: to.fullPath }
-    }
+      name: "login",
+      query: { redirect: to.fullPath },
+    };
   }
+
 
   if (to.meta.loggedOut && userStore.isAuthenticated) {
     return {
-      name: 'Home'
-    }
+      name: "home",
+    };
   }
 
   if (to.meta.admin && !userStore.isAdmin) {
     return {
-      name: 'Home'
-    }
+      name: "home",
+    };
   }
-})
+});
 
-
-export default router
+export default router;

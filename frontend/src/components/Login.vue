@@ -84,6 +84,8 @@ const submit = async () => {
     
     if (route.query.redirect)
         router.push(route.query.redirect as string);
+    else if (authStore.user?.role === 'registered')
+        router.push({name: 'registered-user-info'})
     else router.push({ name: 'home' });
   } catch (error: any) {
   

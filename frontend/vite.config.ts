@@ -1,19 +1,25 @@
-// Plugins
-import vue from '@vitejs/plugin-vue'
-import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
-import ViteFonts from 'unplugin-fonts/vite'
-
-// Utilities
-import { defineConfig } from 'vite'
-import { fileURLToPath, URL } from 'node:url'
+import vue from "@vitejs/plugin-vue";
+import vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
+import ViteFonts from "unplugin-fonts/vite";
+import { defineConfig } from "vite";
+import { fileURLToPath, URL } from "node:url";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  server: {
+    port: 8080,
+    proxy: {
+      "/api": {
+        target: process.env.API_URL,
+        changeOrigin: true,
+        rewrite: path => path.replace('/api/v1/', "/")
+      },
+    },
+  },
   plugins: [
     vue({
       template: { transformAssetUrls },
     }),
-    // https://github.com/vuetifyjs/vuetify-loader/tree/master/packages/vite-plugin#readme
     vuetify({
       autoImport: true,
     }),
@@ -21,21 +27,17 @@ export default defineConfig({
       google: {
         families: [
           {
-            name: 'Roboto',
-            styles: 'wght@100;300;400;500;700;900',
+            name: "Roboto",
+            styles: "wght@100;300;400;500;700;900",
           },
         ],
       },
     }),
   ],
-  define: { 'process.env': {} },
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
+      "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
-    extensions: ['.js', '.json', '.jsx', '.mjs', '.ts', '.tsx', '.vue'],
+    extensions: [".js", ".json", ".jsx", ".mjs", ".ts", ".tsx", ".vue"],
   },
-  server: {
-    port: 3000,
-  },
-})
+});

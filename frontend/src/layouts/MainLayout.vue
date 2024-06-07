@@ -50,7 +50,7 @@
 import Article from '@/class/article';
 import { useArticleStore } from '@/stores/Article';
 import { useAuthStore } from '@/stores/Auth';
-import { computed, onMounted } from 'vue';
+import { computed, onMounted , watch} from 'vue';
 import { ref } from 'vue'
 import { useRoute } from 'vue-router';
 import { useDisplay } from 'vuetify';
@@ -59,7 +59,7 @@ import { useDisplay } from 'vuetify';
 const userStore = useAuthStore()
 const auth = userStore.isAuthenticated
 const userName = userStore.user?.firstName.concat(" ", userStore.user?.lastName)
-const drawer = ref(true)
+const drawer = ref( true  )
 const route = useRoute()
 
 const { mobile } = useDisplay();
@@ -81,6 +81,13 @@ async function loadArticles() {
   } finally {
   }
 }
+
+watch(route, () => {
+  if(route.name === 'registered-user-info') drawer.value = false; // hide naw
+})
+onMounted(() => {
+  if(route.name === 'registered-user-info') drawer.value = false; // hide naw
+})
 
 </script>
 

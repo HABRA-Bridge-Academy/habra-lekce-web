@@ -57,28 +57,34 @@ const routes = [
     ],
   },
   {
-    path: "/prihlaseni",
-    name: "login",
-    component: () => import("@/components/Login.vue"),
-    meta: {
-      loggedOut: true,
-    },
-  },
-  {
-    path: "/odhlaseni",
-    name: "logout",
-    component: () => import("@/components/Logout.vue"),
-    meta: {
-      loggedIn: true,
-    },
-  },
-  {
-    path: "/registrace",
-    name: "register",
-    component: () => import("@/components/Registration.vue"),
-    meta: {
-      loggedOut: true,
-    },
+    path: "/",
+    component: () => import("@/layouts/FocusLayout.vue"),
+    children: [
+      {
+        path: "/prihlaseni",
+        name: "login",
+        component: () => import("@/views/user/LoginView.vue"),
+        meta: {
+          loggedOut: true,
+        },
+      },
+      {
+        path: "/odhlaseni",
+        name: "logout",
+        component: () => import("@/components/Logout.vue"),
+        meta: {
+          loggedIn: true,
+        },
+      },
+      {
+        path: "/registrace",
+        name: "register",
+        component: () => import("@/views/user/RegisterView.vue"),
+        meta: {
+          loggedOut: true,
+        },
+      }
+    ],
   },
 ];
 

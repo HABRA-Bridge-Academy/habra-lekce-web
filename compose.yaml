@@ -8,48 +8,66 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+    volumes:
+      - mongo-data:/data/db
+      - ./dev/mongod.conf:/etc/mongod.conf  # Mount the custom configuration file
+    command: ["mongod", "--config", "/etc/mongod.conf"]
+    logging:
+      driver: none
 
-  backend:
-    build: ./backend
-    restart: always
-    environment:
-      - NODE_ENV=development
-      - ENV=development
-      - MONGO_URL=mongodb://mongo:27017/habra
-      - PORT=3004
-      - LOG_FILE=/var/log/habra-lekce.log
-      - LOG_LEVEL=debug
-      - SECRET=trumpisgay
+  payload-dev:
+    image: node:18-alpine
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./backend:/home/node/app
+      - ./backend/node_modules:/home/node/app/node_modules
+    working_dir: /home/node/app/
+    command: sh -c "npm ci && npm dev"
     depends_on:
       mongo:
         condition: service_healthy
-    volumes:
-      - ./backend:/usr/src/app
-      - /usr/src/app/node_modules
+    env_file:
+      - ./backend/.env
+  # backend:
+  #   build: ./backend
+  #   restart: always
+  #   environment:
+  #     - NODE_ENV=development
+  #     - ENV=development
+  #     - MONGO_URL=mongodb://mongo:27017/habra
+  #     - PORT=3004
+  #     - LOG_FILE=/var/log/habra-lekce.log
+  #     - LOG_LEVEL=debug
+  #     - SECRET=trumpisgay
+  #   depends_on:
+  #     mongo:
+  #       condition: service_healthy
+  #   volumes:
+  #     - ./backend:/usr/src/app
+  #     - /usr/src/app/node_modules
 
-  create-admin-user:
-    build: ./backend
-    command: node bin/createAdminUser
-    depends_on:
-      backend:
-        condition: service_started
-    environment:
-      - NODE_ENV=development
-      - ENV=development
-      - MONGO_URL=mongodb://mongo:27017/habra
-      - SECRET=trumpisgay
-      - ADMIN_PASSWORD=admin
-      - ADMIN_EMAIL=admin
-    volumes:
-      - ./backend:/usr/src/app
-      - /usr/src/app/node_modules
+  # create-admin-user:
+  #   build: ./backend
+  #   command: node bin/createAdminUser
+  #   depends_on:
+  #     backend:
+  #       condition: service_started
+  #   environment:
+  #     - NODE_ENV=development
+  #     - ENV=development
+  #     - MONGO_URL=mongodb://mongo:27017/habra
+  #     - SECRET=trumpisgay
+  #     - ADMIN_PASSWORD=admin
+  #     - ADMIN_EMAIL=admin
+  #   volumes:
+  #     - ./backend:/usr/src/app
+  #     - /usr/src/app/node_modules
 
   frontend:
     build: ./frontend
     environment:
-      - API_URL=http://backend:3004
-      - VITE_API_URL=/api/v1
-      - VITE_BASE_URL=http://localhost:8081
+      - VITE_API_URL=http://backend:3004/api/
     ports:
       - "8081:8080"
     volumes:

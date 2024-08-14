@@ -1,32 +1,69 @@
-import { CollectionConfig } from 'payload/types'
+import { CollectionConfig } from "payload/types";
 
 const Users: CollectionConfig = {
-  slug: 'users',
+  slug: "users",
   auth: true,
   admin: {
-    useAsTitle: 'email',
+    useAsTitle: "email",
+    group: {
+      en: "User management",
+      cs: "Správa uživatelů",
+    },
+  },
+  labels: {
+    plural: {
+      en: "Users",
+      cs: "Uživatelé",
+    },
+    singular: {
+      en: "User",
+      cs: "Uživatel",
+    },
   },
   fields: [
     // Email added by default
     {
-      name: 'firstName',
-      type: 'text',
+      label: {
+        cs: "Jméno",
+        en: "First Name",
+      },
+      name: "firstName",
+      type: "text",
     },
     {
-      name: 'lastName',
-      type: 'text',
+      label: {
+        cs: "Příjmení",
+        en: "Last Name",
+      },
+      name: "lastName",
+      type: "text",
     },
     {
-      name: 'role',
-      type: 'select',
+      label: {
+        cs: "Role",
+        en: "Role",
+      },
+      name: "role",
+      type: "select",
       options: [
-        { label: 'Admin', value: 'admin' },
-        { label: 'User', value: 'user' },
+        {
+          label: {
+            en: "Admin",
+            cs: "Administrátor",
+          },
+          value: "admin",
+        },
+        {
+          label: {
+            en: "User",
+            cs: "Uživatel",
+          },
+          value: "user",
+        },
       ],
-      defaultValue: 'user',
+      defaultValue: "user",
     },
-    
   ],
-}
+};
 
-export default Users
+export default Users;

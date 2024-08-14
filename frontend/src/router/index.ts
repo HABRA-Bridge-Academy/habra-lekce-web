@@ -1,5 +1,6 @@
 // Composables
 import { useAuthStore } from "@/stores/Auth";
+import { before } from "node:test";
 import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
@@ -71,7 +72,13 @@ const routes = [
       {
         path: "/odhlaseni",
         name: "logout",
-        component: () => import("@/components/Logout.vue"),
+        beforeEnter: async () => {
+          const userStore = useAuthStore();
+          userStore.logout();
+          return {
+            name: "home",
+          };
+        },
         meta: {
           loggedIn: true,
         },

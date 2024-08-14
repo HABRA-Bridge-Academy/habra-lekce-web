@@ -9,12 +9,27 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical'
 
 import Users from './collections/Users'
 import Articles from './collections/Articles'
+import Logo from './components/Logo'
+import Icon from './components/Icon'
 
 export default buildConfig({
   admin: {
     user: Users.slug,
     bundler: webpackBundler(),
+
+    meta: {
+      titleSuffix: '- HABRA Admin',
+      favicon: '/assets/favicon-green-admin.png',
+      ogImage: '/assets/logo.svg',
+    },
+    components: {
+      graphics: {
+        Logo: Logo,
+        Icon: Icon,
+      }
+    },  
   },
+
   editor: lexicalEditor({}),
   collections: [Users, Articles],
   typescript: {

@@ -1,5 +1,6 @@
 import express from "express";
 import payload from "payload";
+import path from 'path';
 import { initApiDocs } from "./apidoc";
 
 require("dotenv").config();
@@ -10,7 +11,12 @@ app.get("/", (_, res) => {
   res.redirect("/admin");
 });
 
+app.get('/health', (_, res) => {
+  res.sendStatus(200);
+});
+
 initApiDocs(app);
+app.use('/assets', express.static(path.resolve(__dirname, './assets')));
 
 const start = async () => {
   // Initialize Payload

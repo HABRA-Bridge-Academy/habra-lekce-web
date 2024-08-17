@@ -18,6 +18,7 @@
   "exclude": ["node_modules", "dist", "build"],
   "ts-node": {
     "transpileOnly": true,
-    "swc": true
+    "swc": true,
+    "require": ["tsconfig-paths/register"]
   }
 }

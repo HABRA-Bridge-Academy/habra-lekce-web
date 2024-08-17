@@ -1,11 +1,14 @@
-# Dockerfile
+# Use the official Node.js image (Debian-based)
+FROM node:18
 
-FROM node:18-alpine
-
-# Install curl
-RUN apk add --no-cache curl && \
-    apk add --no-cache --virtual .build-deps alpine-sdk && \
-    apk add --no-cache inotify-tools
+# Install dependencies for sharp, including libvips
+RUN apt-get update && \
+    apt-get install -y \
+    curl \
+    inotify-tools \
+    libvips-dev \
+    && apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /home/node/app
@@ -13,8 +16,9 @@ WORKDIR /home/node/app
 # Copy package.json and package-lock.json
 COPY package*.json ./
 
+RUN chown root.root .
 # Install dependencies
-RUN npm ci --quiet
+RUN npm ci --quiet --platform=linux --arch=arm64
 
 # Copy the application code
 COPY . .

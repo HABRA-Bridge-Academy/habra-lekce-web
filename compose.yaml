@@ -85,23 +85,16 @@ services:
         echo 'Enjoy your development!'
       "
 
-  # backend:
-  #   build: ./backend
-  #   restart: always
-  #   environment:
-  #     - NODE_ENV=development
-  #     - ENV=development
-  #     - MONGO_URL=mongodb://mongo:27017/habra
-  #     - PORT=3004
-  #     - LOG_FILE=/var/log/habra-lekce.log
-  #     - LOG_LEVEL=debug
-  #     - SECRET=trumpisgay
-  #   depends_on:
-  #     mongo:
-  #       condition: service_healthy
-  #   volumes:
-  #     - ./backend:/usr/src/app
-  #     - /usr/src/app/node_modules
+  data-importer:
+    image: mongo
+    depends_on:
+      mongo:
+        condition: service_healthy
+    volumes:
+      - ./dev/articles.json:/articles.json
+      - ./dev/mongo-import.sh:/mongo-import.sh
+    command: ["/bin/sh", "/mongo-import.sh"]
+    restart: "no"
 
   # create-admin-user:
   #   build: ./backend

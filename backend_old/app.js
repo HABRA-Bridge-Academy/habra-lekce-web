@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-const dbUrl = process.env.DB_URL || "mongodb://localhost:27017";
+const dbUrl = process.env.MONGO_URL || "mongodb://localhost:27017";
 require('./src/mongoose').initMongoose(dbUrl);
 
 const initAuth = require('./src/auth').initAuth;

@@ -59,11 +59,30 @@ To push the tag to the remote repository, you have to explicitly push it after y
 git push --tags
 ```
 
-### Environment
+### Docker compose
+
+Docker compose is a tool for defining and running multi-container Docker applications. With Compose, you use a YAML file to configure your application’s services. Then, with a single command, you create and start all the services from your configuration.
+
+Imagine you want to run `npm run dev` for frontend and backend at the same time. You can use docker-compose to run both services at the same time with one command.
+
+You will need [Docker desktop](https://www.docker.com/products/docker-desktop/) installed on your machine.
 
 ```
-npm install
-npm run dev
-npm run build
+docker-compose up
 ```
 
+This command will start the services defined in `compose.yaml` file.
+
+Alternatively, you can run the services in the background:
+
+```
+docker-compose up -d
+```
+
+To stop the services:
+
+```
+docker-compose down
+```
+
+Alternatively, you can use Podman instead of docker. 

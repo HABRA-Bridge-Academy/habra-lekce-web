@@ -3,27 +3,45 @@
  *
  * Framework documentation: https://vuetifyjs.com`
  */
-
-// Styles
-import '@mdi/font/css/materialdesignicons.css'
-import 'vuetify/styles'
+import "@mdi/font/css/materialdesignicons.css";
+import "vuetify/styles";
 
 // Composables
-import { createVuetify } from 'vuetify'
+import { createVuetify } from "vuetify";
+import * as components from "vuetify/components";
+import * as directives from "vuetify/directives";
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
-  display: {
-    mobileBreakpoint: 'md'
-  },
+  components,
+  directives,
   theme: {
     themes: {
       light: {
         colors: {
-          primary: '#1867C0',
-          secondary: '#5CBBF6',
+          primary: "#163558",
+          secondary: "#0094fa",
         },
       },
     },
   },
-})
+  display: {
+    mobileBreakpoint: 'md'
+  },
+  defaults: {
+    VCard: {
+      elevation: 0,
+    },
+    VTextField: {
+      variant: "outlined",
+      border: "solid 1px #163558",
+      density: "comfortable",
+    },
+    VSelect: {
+      variant: "outlined",
+    },
+    VTextarea: {
+      variant: "outlined",
+    }
+  }
+});

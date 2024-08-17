@@ -23,7 +23,7 @@ export const useAuthStore = defineStore('auth', {
         async login(email: string, password: string) {
             try {
                 const response = await axios.post('/auth/login', { email, password });
-                this.user = response.data.user;
+                this.user =  User.make(response.data.user);
                 this.isAuthenticated = true;
                 localStorage.user = JSON.stringify(this.user);
                 console.debug('Login successful:', this.user);

@@ -1,12 +1,13 @@
 <template>
   <v-app>
-    <v-app-bar absolute color="#1A237E" height="100">
+    <v-app-bar absolute color="#1A237E" height="100" >
       <v-btn icon="mdi-menu" @click="drawer = !drawer" v-show="mobile"></v-btn>
       <v-spacer></v-spacer>
       <v-spacer></v-spacer>
+      <RouterLink :to="{ name: 'home'}">
       <h1 class="text-white text-center font-weight-bold" :class="{ 'text-h4': !mobile, 'text-h5': mobile, }">
         Havířovská Bridžová Akademie
-      </h1>
+      </h1></RouterLink>
       <v-spacer></v-spacer>
       <div v-if="!auth" class="container">
         <v-chip :to="{ name: 'register' }" text="Registrace"></v-chip>
@@ -21,7 +22,7 @@
           <v-list-item prepend-icon="mdi-home" title="Domů" :to="{ name: 'home' }"></v-list-item>
           <v-list-item v-for="year in years" :active="activeYear === year" :prepend-icon="'mdi-numeric-' + year"
             :title="year + '. Ročník'" :to="{ name: 'year-overview', params: { year } }"></v-list-item>
-          <v-list-item prepend-icon="mdi-logout" title="Odhlásit se" :to="{ name: 'logout' }"></v-list-item>
+          <v-list-item prepend-icon="mdi-logout" title="Odhlásit se" @click="logout"></v-list-item>
         </v-list>
       </div>
     </v-navigation-drawer>
@@ -52,8 +53,9 @@ import { useArticleStore } from '@/stores/Article';
 import { useAuthStore } from '@/stores/Auth';
 import { computed, onMounted } from 'vue';
 import { ref } from 'vue'
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useDisplay } from 'vuetify';
+import { toast } from '@/plugins/toastify'
 
 
 const userStore = useAuthStore()
@@ -61,6 +63,9 @@ const auth = userStore.isAuthenticated
 const userName = userStore.user?.firstName.concat(" ", userStore.user?.lastName)
 const drawer = ref(true)
 const route = useRoute()
+const progress = ref(false)
+const router = useRouter()
+
 
 const { mobile } = useDisplay();
 
@@ -80,6 +85,20 @@ async function loadArticles() {
     console.error
   } finally {
   }
+}
+
+const logout = async () => {
+    try {
+        progress.value = true;
+        await userStore.logout( );
+        toast("Odhlášení proběhlo úspěšně.")
+        router.push({ name: 'login' })
+        ;
+
+    } catch (error: any) {        }
+     finally {
+        progress.value = false;
+    }
 }
 
 </script>

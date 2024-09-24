@@ -3,9 +3,11 @@
 <v-app>
     <v-app-bar color="#1A237E" class="header" height="100">
       <v-spacer></v-spacer>
+      <RouterLink :to="{ name: 'home'}">
+
       <h1 class="text-white text-center text-h4 font-weight-bold">
         Havířovská Bridžová Akademie - Přihlášení
-      </h1>
+      </h1></RouterLink>
       <v-spacer></v-spacer>
     </v-app-bar>
     <v-main>

@@ -18,7 +18,7 @@ COPY package*.json ./
 
 RUN chown root.root .
 # Install dependencies
-RUN npm ci --quiet --platform=linux --arch=arm64
+RUN npm ci --quiet
 
 # Copy the application code
 COPY . .

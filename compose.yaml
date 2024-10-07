@@ -1,54 +1,56 @@
-
 services:
   mongo:
-    image: mongo
-    restart: always
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    command: mongod --quiet --logpath /dev/null --storageEngine=wiredTiger
+    volumes:
+      - ./dev/mongod.conf:/etc/mongod.conf
+      - mongo-data:/data/db
+    logging:
+      driver: none
+    
+    user: "mongodb"
     healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/habra --quiet
+      test:
+        echo 'db.runCommand("ping").ok' | mongosh localhost:27017/habra --quiet
       interval: 5s
       timeout: 10s
       retries: 30
-    volumes:
-      - mongo-data:/data/db/
-      - ./dev/mongod.conf:/etc/mongod.conf  
-    command: ["mongod", "--config", "/etc/mongod.conf"]
-    user: "mongodb"
-    logging:
-      driver: none
 
-  backend-dev:
-    build: ./backend 
+  api:
+    image: node:18-alpine
     ports:
-      - '3000:3000'
+      - "3000:3000"
     volumes:
       - ./backend:/home/node/app
+      - ./backend/node_modules:/home/node/app/node_modules
     working_dir: /home/node/app/
-    environment:
-      - DATABASE_URI=mongodb://mongo:27017/habra
-      - PAYLOAD_SECRET=495499533ce7bfd1ceb3e4c2
+    command: sh -c "apk add --no-cache curl && yarn install && yarn dev"
     depends_on:
       mongo:
         condition: service_healthy
+    environment:
+      - DATABASE_URI=mongodb://mongo/habralekce
+      - PAYLOAD_SECRET=ed56e9cf3e22912dfd19cba8
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
-      interval: 5s
-      timeout: 10s
-      retries: 30
-      start_period: 10s
-  
+        test: ["CMD", "curl", "-f", "http://localhost:3000/admin"]
+        interval: 5s
+        timeout: 10s
+        retries: 30
+        start_period: 10s
+
+
   frontend:
     build: ./frontend
     environment:
       - VITE_API_URL=/api/
-      - PROXY_API_URL=http://backend-dev:3000
+      - PROXY_API_URL=http://api:3000
     ports:
       - "8081:8081"
     volumes:
       - ./frontend:/usr/src/app
       - /usr/src/app/node_modules
-    depends_on:
-      backend-dev:
-        condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8081/"]
       interval: 5s
@@ -59,12 +61,15 @@ services:
   welcome-service:
     image: alpine
     depends_on:
-      backend-dev:
+      api:
         condition: service_healthy
       mongo:
         condition: service_healthy
       frontend:
         condition: service_healthy
+      data-importer: 
+        condition: service_completed_successfully
+
     command: >
       /bin/sh -c "
         echo 'Welcome to Habra Lekce!'
@@ -72,14 +77,19 @@ services:
         echo 'Backend runs on http://localhost:3000/'
         echo '  - API runs on http://localhost:3000/api/'
         echo '    - API docs run on http://localhost:3000/api-docs'
-        echo '    - You can also have a look at Payload REST API docs at https://payloadcms.com/docs/rest-api/overview'
-        echo '      Payload is the content management system used as a backend in this project.'
+        echo '    - You can also have a look at Payload REST API docs at
+      https://payloadcms.com/docs/rest-api/overview'
+        echo '      Payload is the content management system used as a backend
+      in this project.'
         echo '  - Admin panel runs on http://localhost:3000/admin'
-        echo '  - If started for the first time, visit the admin panel to create an admin user.'
+        echo '  - If started for the first time, visit the admin panel to create
+      an admin user.'
         echo 'Frontend and backend should function with hot reload'
-        echo '  - any changes to the code should be reflected in the browser without restart.'
+        echo '  - any changes to the code should be reflected in the browser
+      without restart.'
         echo 'MongoDB is up but the service is not exposed.'
-        echo '  - You can use mongosh to connect to the database, just make sure to run it in the mongo service container.'
+        echo '  - You can use mongosh to connect to the database, just make sure
+      to run it in the mongo service container.'
         echo '  - The database is named "habra".'
         echo 'All services are now healthy and running successfully.'
         echo 'Enjoy your development!'

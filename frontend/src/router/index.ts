@@ -9,14 +9,9 @@ const routes = [
     component: () => import("@/layouts/MainLayout.vue"),
     children: [
       {
-        path: "",
-        name: "frontpage",
-        component: () => import("@/views/Frontpage.vue")
-      },
-      {
-        path: "/domu",
-        name: "home",
-        component: () => import("@/views/Home.vue"),
+        path: '/',
+        name: 'home',
+        component: () => import('@/views/Home.vue'),
       },
       {
         path: "podminky-ochrany-osobnich-udaju",

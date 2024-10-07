@@ -1,12 +1,19 @@
 <template>
   <v-app>
-    <v-app-bar absolute color="#1A237E">
-      <template v-slot:prepend>
-        <v-app-bar-nav-icon @click="drawer = !drawer" v-show="mobile"></v-app-bar-nav-icon>
-      </template>
-
-      <v-app-bar-title class="text-white font-weight-bold"> Havířovská Bridžová Akademie</v-app-bar-title>
-
+    <v-app-bar absolute color="#1A237E" height="100" >
+      <v-btn icon="mdi-menu" @click="drawer = !drawer" v-show="mobile"></v-btn>
+      <v-spacer></v-spacer>
+      <v-spacer></v-spacer>
+      <RouterLink :to="{ name: 'home'}">
+      <h1 class="text-white text-center font-weight-bold" :class="{ 'text-h4': !mobile, 'text-h5': mobile, }">
+        Havířovská Bridžová Akademie
+      </h1></RouterLink>
+      <v-spacer></v-spacer>
+      <div v-if="!auth" class="container">
+        <v-chip :to="{ name: 'register' }" text="Registrace"></v-chip>
+        <v-chip :to="{ name: 'login' }" text="Přihlášení"></v-chip>
+      </div>
+      <v-spacer></v-spacer>
     </v-app-bar>
     <v-navigation-drawer absolute v-model="drawer" :temporary="mobile">
       <div class="sticky">
@@ -48,10 +55,14 @@ import { computed, onMounted, watch } from 'vue';
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router';
 import { useDisplay } from 'vuetify';
+import { toast } from '@/plugins/toastify'
 
 const userStore = useAuthStore()
 const route = useRoute()
+const progress = ref(false)
 const router = useRouter()
+
+
 const { mobile } = useDisplay();
 const articleStore = useArticleStore();
 
@@ -75,18 +86,26 @@ async function loadArticles() {
   } finally {
   }
 }
-
-async function logout() {
-  await userStore.logout();
-  router
-}
-
 watch(route, () => {
   if (route.name === 'registered-user-info') drawer.value = false; // hide nav
 })
 onMounted(() => {
   if (route.name === 'registered-user-info') drawer.value = false; // hide nav
 })
+
+const logout = async () => {
+    try {
+        progress.value = true;
+        await userStore.logout( );
+        toast("Odhlášení proběhlo úspěšně.")
+        router.push({ name: 'login' })
+        ;
+
+    } catch (error: any) {        }
+     finally {
+        progress.value = false;
+    }
+}
 
 </script>
 

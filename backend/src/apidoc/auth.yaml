@@ -2,7 +2,7 @@
 
 
 paths:
-  /auth/login:
+  /api/users/login:
     post:
       summary: User login
       operationId: loginUser
@@ -38,7 +38,7 @@ paths:
         '401':
           description: Authentication failed
 
-  /auth/logout:
+  /api/users/logout:
     post:
       summary: User logout
       operationId: logoutUser
@@ -55,7 +55,7 @@ paths:
                   success:
                     type: boolean
 
-  /auth/change-password:
+  /api/users/change-password:
     post:
       summary: Change user password
       tags:
@@ -85,7 +85,7 @@ paths:
         '401':
           description: Unauthorized
 
-  /auth/register:
+  /api/users/register:
     post:
       summary: Register a new user
       operationId: registerUser

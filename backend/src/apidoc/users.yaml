@@ -68,7 +68,7 @@ components:
         - email
         - role
 
-/users:
+/api/users:
   get:
     tags:
       - User Management
@@ -120,7 +120,7 @@ components:
       400:
         description: Bad request
 
-/users/{id}:
+/api/users/{id}:
   get:
     tags:
       - User Management

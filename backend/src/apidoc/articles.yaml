@@ -1,6 +1,6 @@
 
 paths:
-  /articles/:
+  /api/articles/:
     get:
       tags:
         - Content
@@ -36,7 +36,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Article'
 
-  /articles/{id}:
+  /api/articles/{id}:
     get:
       tags:
         - Content

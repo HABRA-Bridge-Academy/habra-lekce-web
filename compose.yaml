@@ -30,11 +30,12 @@ services:
     environment:
       - NODE_ENV=development
       - APP_PORT=3100
+      - LOCAL=true
       - FRONTEND_DEV_URL=http://localhost:8081
       - DATABASE_URI=mongodb://mongo/habralekce
       - PAYLOAD_SECRET=ed56e9cf3e22912dfd19cba8
     healthcheck:
-        test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+        test: ["CMD", "curl", "-f", "http://localhost:3100/health"]
         interval: 5s
         timeout: 10s
         retries: 30

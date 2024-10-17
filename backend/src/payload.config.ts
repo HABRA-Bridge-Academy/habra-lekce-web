@@ -10,10 +10,12 @@ import Users from './collections/users/Users'
 import Articles from './collections/articles/Articles'
 import Logo from './components/Logo'
 import Icon from './components/Icon'
+import VersionInfo from './components/VersionInfo'
 
 const DEV = process.env.NODE_ENV === 'development';
 const APP_PORT = process.env.APP_PORT || 3100;
 const FRONTEND_DEV_URL = process.env.FRONTEND_DEV_PORT || "http://localhost:8080"; 
+const LOCAL = process.env.LOCAL || false;
 
 export default buildConfig({
   admin: {
@@ -22,14 +24,20 @@ export default buildConfig({
 
     meta: {
       titleSuffix: '- HABRA Admin',
-      favicon: '/assets/favicon-green-admin.png',
+      favicon: LOCAL ? '/assets/favicon-green-admin-local.png' 
+               : DEV ? '/assets/favicon-green-admin-dev.png' 
+               : '/assets/favicon-green-admin.png',
       ogImage: '/assets/logo.svg',
     },
     components: {
       graphics: {
         Logo: Logo,
         Icon: Icon,
-      }
+      },
+      afterNavLinks: [
+        VersionInfo
+      ]
+      
     }
   },
   csrf: [

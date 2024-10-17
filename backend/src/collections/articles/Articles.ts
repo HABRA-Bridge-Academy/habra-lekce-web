@@ -26,7 +26,7 @@ const Articles: CollectionConfig = {
       },
     },
     { name: "public", type: "checkbox", defaultValue: false },
-    { name: "created", type: "date", required: true, defaultValue: Date.now },
+    { name: "created", type: "date", required: true, defaultValue: () => Date.now() },
     { name: "meta", type: "json" },
   ],
   labels: {

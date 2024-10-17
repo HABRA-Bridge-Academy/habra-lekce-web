@@ -159,6 +159,8 @@
           DATABASE_URI={{ db_url }}
           PAYLOAD_SECRET={{ secret }}
           APP_PORT={{ backend_port }}
+          DEPLOY_TIME={{ ansible_date_time.iso8601 }}
+          VERSION={{ git_version.stdout }}
           LOG_FILE={{ log_dir }}/api.log
           LOG_ERROR_FILE={{ log_dir }}/api-errors.log
           LOG_REQUEST_FILE={{ log_dir }}/api-requests.log
@@ -188,11 +190,6 @@
         dest: "/etc/nginx/sites-enabled/habra-api-{{ deployment_name }}.conf"
         state: link
 
-    - name: Ensure old PM2 process is stopped
-      shell: pm2 delete habra-api-{{ deployment_name }}
-      ignore_errors: yes
-      become: yes
-      become_user: habra
 
     - name: Install backend dependencies
       shell: yarn install --frozen-lockfile
@@ -216,9 +213,15 @@
         group: habra
         mode: '0755'
       become: yes    
+    
+    - name: Ensure old PM2 process is stopped
+      shell: pm2 delete habra-api-{{ deployment_name }}
+      ignore_errors: yes
+      become: yes
+      become_user: habra
 
-    - name: Start or restart PM2 process
-      command: pm2 start {{ vps_home }}/backend/dist/server.js --name habra-api-{{ deployment_name }} --log {{ log_dir }}/api-pm2.log
+    - name: Start PM2 process
+      command: pm2 start dist/server.js --name habra-api-{{ deployment_name }} --log {{ log_dir }}/api-pm2.log
       args:
         chdir: "{{ vps_home }}/backend"
       environment:

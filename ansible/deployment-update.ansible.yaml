@@ -1,0 +1,106 @@
+---
+- name: Create deployment 
+  hosts: all
+  vars:
+    # config per deployment
+    # configure in inventory.yaml
+    # deployment_name: 'staging'
+    # web_domain: '{{ deployment_name }}.habra.cz'
+    # backend_port: 3004
+    # support_www: false
+    # db_name: "habra"
+    # db_url: "mongodb://localhost:27017/{{ db_name }}"
+    # notification_email: "{{ lookup('env', 'NOTIFICATION_EMAIL') }}"
+    # git_ref: 'main'
+    # repo_url: 'test'
+
+    # static config
+    web_url: 'https://{{ web_domain }}' 
+    vps_home: "/home/habra/{{ deployment_name }}"
+    log_dir: "/var/log/habra/{{ deployment_name }}"
+    # 
+
+
+  tasks:
+    - name: Display all variables/facts known for a host
+      debug:
+        var: web_domain 
+      tags: debug_info
+
+   
+
+    - name: Mark the repository as a safe directory for Git
+      command: git config --global --add safe.directory "{{ vps_home }}"
+      become: yes  
+
+    - name: Pull latest changes if repository exists
+      git:
+        repo: "{{ repo_url }}"
+        dest: "{{ vps_home }}"
+        version: "{{ git_ref }}"
+        accept_hostkey: yes
+        force: yes  # This forces a pull if there are any local changes
+
+
+    - name: Ensure correct ownership of the repository directory
+      file:
+        path: "{{ vps_home }}"
+        owner: "habra"
+        recurse: yes
+
+    - name: get git version
+      shell: git rev-parse HEAD
+      args:
+        chdir: "{{ vps_home }}"
+      register: git_version
+
+    - name: Add environment information to backend
+      copy:
+        dest: "{{ vps_home }}/backend/.env"
+        content: |
+          DATABASE_URI={{ db_url }}
+          PAYLOAD_SECRET={{ secret }}
+          APP_PORT={{ backend_port }}
+          LOG_FILE={{ log_dir }}/api.log
+          LOG_ERROR_FILE={{ log_dir }}/api-errors.log
+          LOG_REQUEST_FILE={{ log_dir }}/api-requests.log
+          NOTIFICATION_EMAIL={{ notification_email }}
+
+      become: yes
+      become_user: habra
+      
+    - name: Ensure old PM2 process is stopped
+      shell: pm2 delete habra-api-{{ deployment_name }}
+      ignore_errors: yes
+      become: yes
+      become_user: habra
+
+    - name: Install backend dependencies
+      shell: yarn install --frozen-lockfile
+      args:
+        chdir: "{{ vps_home }}/backend"
+      become: yes 
+      become_user: habra
+
+    - name: Build backend
+      shell: yarn build
+      args:
+        chdir: "{{ vps_home }}/backend"
+      become: yes
+      become_user: habra
+
+    - name: restart PM2 process
+      command: pm2 restart d --name habra-api-{{ deployment_name }} d
+      become: yes
+      become_user: habra
+
+  handlers:
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
+
+    - name: Restart Cron
+      service:
+        name: cron
+        state: restarted

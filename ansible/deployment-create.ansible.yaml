@@ -84,6 +84,12 @@
         name: pm2
         global: yes
         state: present
+    - name: Ensure Yarn is installed via npm
+      npm:
+        name: yarn
+        global: yes
+        state: present
+
 
     - name: Add user habra
       ansible.builtin.user:
@@ -115,16 +121,30 @@
         dest: "{{ vps_home }}"
         version: "{{ git_ref }}"
         accept_hostkey: yes
+      become: yes
+      become_user: habra
       when: not repo_dir.stat.exists
+    
+
+    - name: Mark the repository as a safe directory for Git
+      command: git config --global --add safe.directory "{{ vps_home }}"
+      become: yes  
 
     - name: Pull latest changes if repository exists
       git:
         repo: "{{ repo_url }}"
         dest: "{{ vps_home }}"
-        version: main
+        version: "{{ git_ref }}"
         accept_hostkey: yes
         force: yes  # This forces a pull if there are any local changes
+
       when: repo_dir.stat.exists
+
+    - name: Ensure correct ownership of the repository directory
+      file:
+        path: "{{ vps_home }}"
+        owner: "habra"
+        recurse: yes
 
     - name: get git version
       shell: git rev-parse HEAD
@@ -143,14 +163,10 @@
           LOG_ERROR_FILE={{ log_dir }}/api-errors.log
           LOG_REQUEST_FILE={{ log_dir }}/api-requests.log
           NOTIFICATION_EMAIL={{ notification_email }}
-        
 
-    - name: Install backend dependencies
-      shell: npm ci
-      args:
-        chdir: "{{ vps_home }}/backend"
-
-
+      become: yes
+      become_user: habra
+      
     - name: Set up logrotate configuration
       template:
         src: "logrotate.conf.j2"
@@ -175,16 +191,47 @@
     - name: Ensure old PM2 process is stopped
       shell: pm2 delete habra-api-{{ deployment_name }}
       ignore_errors: yes
+      become: yes
+      become_user: habra
+
+    - name: Install backend dependencies
+      shell: yarn install --frozen-lockfile
+      args:
+        chdir: "{{ vps_home }}/backend"
+      become: yes 
+      become_user: habra
+
+    - name: Build backend
+      shell: yarn build
+      args:
+        chdir: "{{ vps_home }}/backend"
+      become: yes
+      become_user: habra
+
+    - name: Create log directory if it doesn't exist
+      file:
+        path: "{{ log_dir }}"
+        state: directory
+        owner: habra
+        group: habra
+        mode: '0755'
+      become: yes    
 
     - name: Start or restart PM2 process
-      shell: |
-        cd {{ vps_home }}/backend
-        npm ci -production
-        npm run build
-        PAYLOAD_CONFIG_PATH=dist/payload.config.js NODE_ENV=production pm2 start dist/server.js --name habra-api-{{ deployment_name }} --log {{ log_dir }}/api-pm2.log
-        pm2 save
+      command: pm2 start {{ vps_home }}/backend/dist/server.js --name habra-api-{{ deployment_name }} --log {{ log_dir }}/api-pm2.log
       args:
-        executable: /bin/bash
+        chdir: "{{ vps_home }}/backend"
+      environment:
+        PAYLOAD_CONFIG_PATH: "{{ vps_home }}/backend/dist/payload.config.js"
+        NODE_ENV: production
+      become: yes
+      become_user: habra
+
+    - name: Save PM2 process list
+      command: pm2 save
+      become: yes
+      become_user: habra
+
 
     - name: Install Certbot and python3-certbot-nginx
       apt:

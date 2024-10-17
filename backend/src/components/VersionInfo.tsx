@@ -1,15 +1,29 @@
-import React from 'react'
+import React from "react";
+
+const deploytime = process.env.PAYLOAD_PUBLIC_DEPLOY_TIME;
+const gitref = process.env.PAYLOAD_PUBLIC_VERSION;
+const local = process.env.PAYLOAD_PUBLIC_LOCAL;
+
 
 const VersionInfo: React.FC = () => {
-  return (
-    <div>
-      <h4>Version info</h4>
-      <p>
-        The /test directory is used for create custom configurations and data seeding for developing
-        features, writing e2e and integration testing.
-      </p>
-    </div>
-  )
-}
 
-export default VersionInfo
+  let content;
+  if (local === "true") {
+    content = <div>local LIVE server</div>;
+  } else {
+    content = (
+      <div>
+        <div>deployed on: {deploytime} </div>
+        <div>git ref: {gitref}</div>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ order: 10 }}>
+      {content}
+    </div>
+  );
+};
+
+export default VersionInfo;

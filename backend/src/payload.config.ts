@@ -15,7 +15,7 @@ import VersionInfo from './components/VersionInfo'
 const DEV = process.env.NODE_ENV === 'development';
 const APP_PORT = process.env.APP_PORT || 3100;
 const FRONTEND_DEV_URL = process.env.FRONTEND_DEV_PORT || "http://localhost:8080"; 
-const LOCAL = process.env.LOCAL || false;
+const LOCAL = process.env.PAYLOAD_PUBLIC_LOCAL || false;
 
 export default buildConfig({
   admin: {

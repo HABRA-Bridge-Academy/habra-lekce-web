@@ -61,8 +61,8 @@
           DATABASE_URI={{ db_url }}
           PAYLOAD_SECRET={{ secret }}
           APP_PORT={{ backend_port }}
-          DEPLOY_TIME={{ ansible_date_time.iso8601 }}
-          VERSION={{ git_version.stdout }}
+          PAYLOAD_PUBLIC_DEPLOY_TIME={{ ansible_date_time.iso8601 }}
+          PAYLOAD_PUBLIC_VERSION={{ git_version.stdout[:9] }}
           LOG_FILE={{ log_dir }}/api.log
           LOG_ERROR_FILE={{ log_dir }}/api-errors.log
           LOG_REQUEST_FILE={{ log_dir }}/api-requests.log

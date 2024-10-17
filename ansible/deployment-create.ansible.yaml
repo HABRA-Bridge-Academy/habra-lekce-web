@@ -110,6 +110,10 @@
         name: git
         state: present
 
+    - name: Mark the repository as a safe directory for Git
+      command: git config --global --add safe.directory "{{ vps_home }}"
+      become: yes  
+
     - name: Check if the repository directory exists
       stat:
         path: "{{ vps_home }}"
@@ -121,15 +125,8 @@
         dest: "{{ vps_home }}"
         version: "{{ git_ref }}"
         accept_hostkey: yes
-      become: yes
-      become_user: habra
       when: not repo_dir.stat.exists
     
-
-    - name: Mark the repository as a safe directory for Git
-      command: git config --global --add safe.directory "{{ vps_home }}"
-      become: yes  
-
     - name: Pull latest changes if repository exists
       git:
         repo: "{{ repo_url }}"
@@ -159,8 +156,8 @@
           DATABASE_URI={{ db_url }}
           PAYLOAD_SECRET={{ secret }}
           APP_PORT={{ backend_port }}
-          DEPLOY_TIME={{ ansible_date_time.iso8601 }}
-          VERSION={{ git_version.stdout }}
+          PAYLOAD_PUBLIC_DEPLOY_TIME={{ ansible_date_time.iso8601 }}
+          PAYLOAD_PUBLIC_VERSION={{ git_version.stdout }}
           LOG_FILE={{ log_dir }}/api.log
           LOG_ERROR_FILE={{ log_dir }}/api-errors.log
           LOG_REQUEST_FILE={{ log_dir }}/api-requests.log
@@ -226,7 +223,7 @@
         chdir: "{{ vps_home }}/backend"
       environment:
         PAYLOAD_CONFIG_PATH: "{{ vps_home }}/backend/dist/payload.config.js"
-        NODE_ENV: production
+        NODE_ENV: "{{ node_env }}"
       become: yes
       become_user: habra
 

@@ -19,10 +19,10 @@ const Articles: CollectionConfig = {
   },
   fields: [
     { name: "title", type: "text", required: true },
-    { name: "content", type: "richText", required: true,
+    { name: "content", type: "textarea", required: true,
       access: {
         read: ({ req: { user }, doc }) => user || doc.public,
-      }
+      },
     },
     { name: "public", type: "checkbox", defaultValue: false },
     { name: "created", type: "date", required: true, defaultValue: Date.now },

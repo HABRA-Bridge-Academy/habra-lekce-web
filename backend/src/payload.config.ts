@@ -26,16 +26,9 @@ export default buildConfig({
         Logo: Logo,
         Icon: Icon,
       }
-    },  
-    webpack: (config) => {
-      config.resolve.alias = {
-        ...config.resolve.alias,
-        '@': path.resolve(__dirname),
-      }
-      return config
     }
   },
-
+  
   editor: lexicalEditor({}),
   collections: [Users, Articles],
   typescript: {
@@ -48,4 +41,5 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URI,
   }),
+  
 })

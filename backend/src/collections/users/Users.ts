@@ -1,5 +1,5 @@
-import { admins } from "@/access/admins";
-import { anyone } from "@/access/anyone";
+import { admins } from "../../access/admins";
+import { anyone } from "../../access/anyone";
 import { CollectionConfig } from "payload/types";
 import adminsAndUser from "./adminsAndUser";
 

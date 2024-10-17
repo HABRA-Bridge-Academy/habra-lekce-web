@@ -69,12 +69,6 @@
       become: yes
       become_user: habra
       
-    - name: Ensure old PM2 process is stopped
-      shell: pm2 delete habra-api-{{ deployment_name }}
-      ignore_errors: yes
-      become: yes
-      become_user: habra
-
     - name: Install backend dependencies
       shell: yarn install --frozen-lockfile
       args:

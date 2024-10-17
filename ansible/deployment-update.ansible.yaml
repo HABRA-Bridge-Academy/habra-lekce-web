@@ -90,7 +90,7 @@
       become_user: habra
 
     - name: restart PM2 process
-      command: pm2 restart d --name habra-api-{{ deployment_name }} d
+      command: pm2 restart  --name habra-api-{{ deployment_name }} 
       become: yes
       become_user: habra
 

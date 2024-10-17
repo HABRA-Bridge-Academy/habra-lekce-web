@@ -226,13 +226,7 @@
                     abychom Vám mohli poskytovat personalizovaný obsah a reklamu na webových stránkách třetích stran a
                     jiných prodejních kanálech.</p>
 
-                <h3>10. Jsou zpracovávány i údaje o dětech?</h3>
-                <p>Naše webové stránky nejsou určeny dětem mladším 16 let. Jejich osobní údaje tedy úmyslně
-                    neshromažďujeme. Pokud zjistíme, že jsme nedopatřením získali osobní údaje o dětech mladších 16 let,
-                    provedeme kroky k tomu, abychom tyto údaje co nejrychleji vymazali, kromě případů, kdy jsme
-                    příslušným zákonem vázáni si je ponechat.</p>
-
-                <h3>11. Závěr</h3>
+                <h3>10. Závěr</h3>
                 <p>Právní předpisy i naše obchodní strategie a s ní související způsoby zpracování Vašich osobních údajů
                     se mohou měnit. Pokud se tyto zásady rozhodneme aktualizovat, umístíme změny na našich webových
                     stránkách a budeme Vás o těchto změnách informovat. V případech, kdy má dojít k zásadnější změně

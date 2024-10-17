@@ -6,6 +6,8 @@ import { initApiDocs } from "./apidoc";
 require("dotenv").config();
 const app = express();
 
+const PORT = process.env.APP_PORT || 3100;
+
 // Redirect root to Admin panel
 app.get("/", (_, res) => {
   res.redirect("/admin");
@@ -30,7 +32,7 @@ const start = async () => {
 
   // Add your own express routes here
 
-  app.listen(3000);
+  app.listen(PORT);
 };
 
 start();

@@ -1,0 +1,216 @@
+---
+- name: Create deployment 
+  hosts: all
+  vars:
+    # config per deployment
+    # configure in inventory.yaml
+    # deployment_name: 'staging'
+    # web_domain: '{{ deployment_name }}.habra.cz'
+    # backend_port: 3004
+    # support_www: false
+    # db_name: "habra"
+    # db_url: "mongodb://localhost:27017/{{ db_name }}"
+    # notification_email: "{{ lookup('env', 'NOTIFICATION_EMAIL') }}"
+    # git_ref: 'main'
+    # repo_url: 'test'
+
+    # static config
+    web_url: 'https://{{ web_domain }}' 
+    vps_home: "/home/habra/{{ deployment_name }}"
+    log_dir: "/var/log/habra/{{ deployment_name }}"
+    # 
+
+
+  tasks:
+    - name: Display all variables/facts known for a host
+      debug:
+        var: web_domain 
+      tags: debug_info
+
+    - name: Ensure Nginx is installed
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    
+    # - name: Check if MongoDB is installed
+    #   command: mongod --version
+    #   register: mongo_version
+    #   ignore_errors: yes
+
+    # - name: Add MongoDB 7.0 GPG key
+    #   ansible.builtin.apt_key:
+    #     url: https://pgp.mongodb.com/server-7.0.asc
+    #     keyring: /usr/share/keyrings/mongodb-server-7.0.gpg
+    #     state: present
+    #   when: mongo_version.rc != 0
+
+    # - name: Add MongoDB 7.0 repository
+    #   ansible.builtin.apt_repository:
+    #     repo: "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse"
+    #     state: present
+    #     filename: "mongodb-org-7.0"
+    #   when: mongo_version.rc != 0
+
+    # - name: Install MongoDB
+    #   apt:
+    #     name: mongodb-org
+    #     state: present
+    #     update_cache: yes
+    #   when: mongo_version.rc != 0
+
+    # - name: Start and enable MongoDB service
+    #   systemd:
+    #     name: mongod
+    #     state: started
+    #     enabled: yes
+
+    - name: Check if Node.js is installed
+      command: node -v
+      register: node_version
+      ignore_errors: yes
+
+    - name: Install Node.js if not present
+      shell: |
+        curl -sL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+        sudo apt-get install -y nodejs
+      when: node_version.rc != 0
+      args:
+        executable: /bin/bash
+
+    - name: Ensure PM2 is installed globally
+      npm:
+        name: pm2
+        global: yes
+        state: present
+
+    - name: Add user habra
+      ansible.builtin.user:
+        name: habra
+        state: present
+        create_home: yes
+        home: /home/habra
+
+    - name: Change ownership of /home/habra
+      ansible.builtin.file:
+        path: /home/habra
+        owner: habra
+        group: habra
+        state: directory
+    
+    - name: Install Git if not present
+      ansible.builtin.package:
+        name: git
+        state: present
+
+    - name: Check if the repository directory exists
+      stat:
+        path: "{{ vps_home }}"
+      register: repo_dir
+
+    - name: Clone repository if directory does not exist
+      git:
+        repo: "{{ repo_url }}"
+        dest: "{{ vps_home }}"
+        version: "{{ git_ref }}"
+        accept_hostkey: yes
+      when: not repo_dir.stat.exists
+
+    - name: Pull latest changes if repository exists
+      git:
+        repo: "{{ repo_url }}"
+        dest: "{{ vps_home }}"
+        version: main
+        accept_hostkey: yes
+        force: yes  # This forces a pull if there are any local changes
+      when: repo_dir.stat.exists
+
+    - name: get git version
+      shell: git rev-parse HEAD
+      args:
+        chdir: "{{ vps_home }}"
+      register: git_version
+
+    - name: Add environment information to backend
+      copy:
+        dest: "{{ vps_home }}/backend/.env"
+        content: |
+          DATABASE_URI={{ db_url }}
+          PAYLOAD_SECRET={{ secret }}
+          APP_PORT={{ backend_port }}
+          LOG_FILE={{ log_dir }}/api.log
+          LOG_ERROR_FILE={{ log_dir }}/api-errors.log
+          LOG_REQUEST_FILE={{ log_dir }}/api-requests.log
+          NOTIFICATION_EMAIL={{ notification_email }}
+        
+
+    - name: Install backend dependencies
+      shell: npm ci
+      args:
+        chdir: "{{ vps_home }}/backend"
+
+
+    - name: Set up logrotate configuration
+      template:
+        src: "logrotate.conf.j2"
+        dest: "/etc/logrotate.d/habra-{{ deployment_name }}"
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Set up Nginx configuration
+      template:
+        src: "nginx.conf.j2"
+        dest: "/etc/nginx/sites-available/habra-api-{{ deployment_name }}.conf"
+      notify:
+        - Restart Nginx
+
+    - name: Enable Nginx site
+      file:
+        src: "/etc/nginx/sites-available/habra-api-{{ deployment_name }}.conf"
+        dest: "/etc/nginx/sites-enabled/habra-api-{{ deployment_name }}.conf"
+        state: link
+
+    - name: Ensure old PM2 process is stopped
+      shell: pm2 delete habra-api-{{ deployment_name }}
+      ignore_errors: yes
+
+    - name: Start or restart PM2 process
+      shell: |
+        cd {{ vps_home }}/backend
+        npm ci -production
+        npm run build
+        PAYLOAD_CONFIG_PATH=dist/payload.config.js NODE_ENV=production pm2 start dist/server.js --name habra-api-{{ deployment_name }} --log {{ log_dir }}/api-pm2.log
+        pm2 save
+      args:
+        executable: /bin/bash
+
+    - name: Install Certbot and python3-certbot-nginx
+      apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+      loop:
+        - certbot
+        - python3-certbot-nginx
+
+    - name: Obtain SSL certificate and configure Nginx
+      command: >
+        certbot run -n --nginx --agree-tos
+        -d {{ web_domain }}
+        -m {{ notification_email }}
+        --redirect
+      args:
+        creates: /etc/letsencrypt/live/example.com/fullchain.pem
+
+  handlers:
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
+
+    - name: Restart Cron
+      service:
+        name: cron
+        state: restarted

@@ -1,0 +1,104 @@
+@use "@/styles/colors" as *;
+@import "@/styles/forms.scss";
+
+* {
+  margin: 0;
+  padding: 0;
+
+  border: 0;
+  outline: 0;
+  background: transparent;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: $tertiary;
+}
+
+h2 {
+  font-size: 1.5em;
+  text-transform: uppercase;
+  color: $black;
+}
+
+th {
+  font-size: 1.2em;
+  color: $black;
+  text-transform: uppercase;
+}
+
+a {
+  color: inherit;
+}
+
+.flex {
+  display: flex;
+  gap: 4px 4px;
+}
+
+.flex.spaced {
+  gap: 4px 16px;
+}
+
+.flex-col {
+  display: flex;
+  gap: 4px 4px;
+  flex-direction: column;
+}
+
+.content-start,
+.justify-start {
+  justify-content: flex-start;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.align-stretch {
+  align-items: stretch;
+}
+
+.aling-center {
+  align-items: center;
+}
+
+.gap-1 {
+  gap: 1em;
+}
+
+.gap-05 {
+  gap: 0.5em;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.grow {
+  flex-grow: 1;
+}
+
+ul {
+  list-style-type: none;
+}
+
+@media (max-width: 600px) {
+  /* Adjust 600px based on your definition of 'small screen' */
+  .v-col {
+    padding-left: 0 !important; /* Removes padding */
+    padding-right: 0 !important; /* Removes padding */
+  }
+
+  .v-card {
+    padding: 20px !important; /* Removes padding */
+  }
+}

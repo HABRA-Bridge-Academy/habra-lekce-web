@@ -4,7 +4,7 @@ import axios from 'axios'
 
 
 export default axios.create({
-    baseURL: "https://api.bridzhavirov.cz",
+    baseURL: import.meta.env.VITE_API_URL,
     headers: {
         "Accept": "application/json"
     },

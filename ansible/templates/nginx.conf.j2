@@ -1,0 +1,19 @@
+# example nginx configuration
+
+server {
+
+    server_name {{ web_domain }} www.{{ web_domain }};
+
+    location / {
+        proxy_pass http://localhost:{{ backend_port }};
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+        proxy_cache off;
+
+        add_header Cache-Control no-cache;
+        expires off;
+    }
+}

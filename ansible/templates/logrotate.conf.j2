@@ -1,0 +1,13 @@
+
+
+
+# API logs
+{{ log_dir }}/api.log {{ log_dir }}/api-myapp.log {
+    weekly
+    missingok
+    rotate 4
+    compress
+    delaycompress
+    notifempty
+    create 0664 root adm
+}

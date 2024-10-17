@@ -67,16 +67,7 @@ const routes = [
       {
         path: "/odhlaseni",
         name: "logout",
-        beforeEnter: async () => {
-          const userStore = useAuthStore();
-          userStore.logout();
-          return {
-            name: "home",
-          };
-        },
-        meta: {
-          loggedIn: true,
-        },
+        component: ()=> import ("@/views/user/LogoutView.vue")
       },
       {
         path: "/registrace",
@@ -91,7 +82,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(import.meta.VITE_BASE_URL),
+  history: createWebHistory(import.meta.env.VITE_BASE_URL),
   routes,
 });
 

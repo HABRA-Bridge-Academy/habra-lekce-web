@@ -31,7 +31,7 @@ const start = async () => {
   });
 
   // Add your own express routes here
-
+  payload.logger.info(`Server started on port ${PORT}`);
   app.listen(PORT);
 };
 

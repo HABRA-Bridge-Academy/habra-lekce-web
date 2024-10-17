@@ -28,8 +28,19 @@ export default buildConfig({
       }
     }
   },
-  
-  editor: lexicalEditor({}),
+  csrf: [
+    'http://vyuka.bridzhavirov.cz',
+    'https://vyuka.bridzhavirov.cz',
+    'http://www.vyuka.bridzhavirov.cz',
+    'https://www.vyuka.bridzhavirov.cz',
+  ],
+  cors: [
+    'http://vyuka.bridzhavirov.cz',
+    'https://vyuka.bridzhavirov.cz',
+    'http://www.vyuka.bridzhavirov.cz',
+    'https://www.vyuka.bridzhavirov.cz',
+  ],
+   editor: lexicalEditor({}),
   collections: [Users, Articles],
   typescript: {
     outputFile: path.resolve(__dirname, 'payload-types.ts'),

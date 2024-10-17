@@ -12,6 +12,7 @@ const Users: CollectionConfig = {
       en: "User management",
       cs: "Správa uživatelů",
     },
+    defaultColumns: ["firstName", "lastName", "role", "email"],
   },
   access: {
     read: adminsAndUser,

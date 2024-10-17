@@ -11,6 +11,10 @@ import Articles from './collections/articles/Articles'
 import Logo from './components/Logo'
 import Icon from './components/Icon'
 
+const DEV = process.env.NODE_ENV === 'development';
+const APP_PORT = process.env.APP_PORT || 3100;
+const FRONTEND_DEV_URL = process.env.FRONTEND_DEV_PORT || "http://localhost:8080"; 
+
 export default buildConfig({
   admin: {
     user: Users.slug,
@@ -33,12 +37,14 @@ export default buildConfig({
     'https://vyuka.bridzhavirov.cz',
     'http://www.vyuka.bridzhavirov.cz',
     'https://www.vyuka.bridzhavirov.cz',
+    ...(DEV ? [`http://localhost:${APP_PORT}`, `http://127.0.0.1:${APP_PORT}`] : []),  
   ],
   cors: [
     'http://vyuka.bridzhavirov.cz',
     'https://vyuka.bridzhavirov.cz',
     'http://www.vyuka.bridzhavirov.cz',
     'https://www.vyuka.bridzhavirov.cz',
+    ...(DEV ? [FRONTEND_DEV_URL] : []),
   ],
    editor: lexicalEditor({}),
   collections: [Users, Articles],
@@ -52,5 +58,7 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URI,
   }),
-  
+  custom: {
+    port: APP_PORT,
+  }
 })

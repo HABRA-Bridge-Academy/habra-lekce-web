@@ -1,15 +1,12 @@
 services:
   mongo:
     image: mongo:latest
-    ports:
-      - "27017:27017"
     command: mongod --quiet --logpath /dev/null --storageEngine=wiredTiger
     volumes:
       - ./dev/mongod.conf:/etc/mongod.conf
       - mongo-data:/data/db
     logging:
       driver: none
-    
     user: "mongodb"
     healthcheck:
       test:
@@ -21,7 +18,7 @@ services:
   api:
     image: node:18-alpine
     ports:
-      - "3000:3000"
+      - "3100:3100"
     volumes:
       - ./backend:/home/node/app
       - ./backend/node_modules:/home/node/app/node_modules
@@ -31,10 +28,13 @@ services:
       mongo:
         condition: service_healthy
     environment:
+      - NODE_ENV=development
+      - APP_PORT=3100
+      - FRONTEND_DEV_URL=http://localhost:8081
       - DATABASE_URI=mongodb://mongo/habralekce
       - PAYLOAD_SECRET=ed56e9cf3e22912dfd19cba8
     healthcheck:
-        test: ["CMD", "curl", "-f", "http://localhost:3000/admin"]
+        test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
         interval: 5s
         timeout: 10s
         retries: 30
@@ -45,7 +45,7 @@ services:
     build: ./frontend
     environment:
       - VITE_API_URL=/api/
-      - PROXY_API_URL=http://api:3000
+      - PROXY_API_URL=http://api:3100
     ports:
       - "8081:8081"
     volumes:

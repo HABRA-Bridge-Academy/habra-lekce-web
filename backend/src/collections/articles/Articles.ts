@@ -9,7 +9,8 @@ const Articles: CollectionConfig = {
     group: {
       en: "Teaching",
       cs: "Výuka",
-    }
+    }, 
+    defaultColumns: ["title", "public", "meta", "created"],
   },
   access: {
     create: admins,

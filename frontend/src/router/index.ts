@@ -15,7 +15,7 @@ const routes = [
       {
         path: 'podminky-ochrany-osobnich-udaju',
         name: 'privacy-policy',
-        component: () => import('@/views/PrivacyPolicy.vue'),
+        component: () => import('@/views/PrivacyPolicyView.vue'),
       },
       {
         path: 'rocnik/:year',

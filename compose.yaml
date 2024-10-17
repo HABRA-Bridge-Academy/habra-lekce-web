@@ -30,7 +30,7 @@ services:
     environment:
       - NODE_ENV=development
       - APP_PORT=3100
-      - LOCAL=true
+      - PAYLOAD_PUBLIC_LOCAL=true
       - FRONTEND_DEV_URL=http://localhost:8081
       - DATABASE_URI=mongodb://mongo/habralekce
       - PAYLOAD_SECRET=ed56e9cf3e22912dfd19cba8

@@ -1,7 +1,7 @@
 export interface User {
     id: string
     name?: string | null
-    roles?: ('admin' | 'user')[] | null
+    role: 'admin' | 'user' | 'registered'
     updatedAt: string
     createdAt: string
     email: string

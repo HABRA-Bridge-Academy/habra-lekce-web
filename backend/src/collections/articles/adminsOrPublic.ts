@@ -6,10 +6,10 @@ const adminsOrPublic: Access = ({ req: { user } }) => {
         return true;
   
     return {
-        public: {
-            $eq: true,
-        },
-      }
+        or: [
+            { public: { equals: true } },  // Updated to use the expected query structure
+        ],
+    };
   }
 
 export default adminsOrPublic;

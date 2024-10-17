@@ -1,4 +1,4 @@
-import { admins } from "@/access/admins.ts";
+import { admins } from "@/access/admins";
 import { CollectionConfig } from "payload/types";
 import adminsOrPublic from "./adminsOrPublic";
 

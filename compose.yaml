@@ -3,7 +3,6 @@ services:
     image: mongo:latest
     command: mongod --quiet --logpath /dev/null --storageEngine=wiredTiger
     volumes:
-      - ./dev/mongod.conf:/etc/mongod.conf
       - mongo-data:/data/db
     logging:
       driver: none
@@ -102,7 +101,6 @@ services:
       mongo:
         condition: service_healthy
     volumes:
-      - ./dev/articles.json:/articles.json
       - ./dev/mongo-import.sh:/mongo-import.sh
     command: ["/bin/sh", "/mongo-import.sh"]
     restart: "no"

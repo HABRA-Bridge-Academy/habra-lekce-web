@@ -63,6 +63,7 @@
           APP_PORT={{ backend_port }}
           PAYLOAD_PUBLIC_DEPLOY_TIME={{ ansible_date_time.iso8601 }}
           PAYLOAD_PUBLIC_VERSION={{ git_version.stdout[:9] }}
+          FRONTEND_DEV_URL=http://localhost:8081
           LOG_FILE={{ log_dir }}/api.log
           LOG_ERROR_FILE={{ log_dir }}/api-errors.log
           LOG_REQUEST_FILE={{ log_dir }}/api-requests.log

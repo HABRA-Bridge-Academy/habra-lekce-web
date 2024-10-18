@@ -29,5 +29,5 @@ async function loadArticle(id: string | undefined) {
 }
 </script>
 <style lang="scss">
-@import "@/Styles/web.scss";
+@import "@/styles/web.scss";
 </style>

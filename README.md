@@ -7,6 +7,10 @@
 - Vuetify docs (material design framework)
     https://vuetifyjs.com/en/getting-started/quick-start
 
+- Payload docs (API framework)
+   https://payloadcms.com/docs/getting-started/concepts
+
+
 ## Reading (optional)
 
 - [HTML box model](https://www.w3schools.com/css/css_boxmodel.asp) - how elements are rendered

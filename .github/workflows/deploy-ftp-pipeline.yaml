@@ -30,4 +30,4 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           local_dir: "./frontend/dist/"
           remote_dir: "./"
-          delete: true
+          delete: false 

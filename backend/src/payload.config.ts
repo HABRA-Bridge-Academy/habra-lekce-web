@@ -16,6 +16,13 @@ const DEV = process.env.NODE_ENV === 'development';
 const APP_PORT = process.env.APP_PORT || 3100;
 const FRONTEND_DEV_URL = process.env.FRONTEND_DEV_URL || "http://localhost:8080"; 
 const LOCAL = process.env.PAYLOAD_PUBLIC_LOCAL || false;
+const ALLOWED_URLS = [
+  'http://vyuka.bridzhavirov.cz',
+  'https://vyuka.bridzhavirov.cz',
+  'http://www.vyuka.bridzhavirov.cz',
+  'https://www.vyuka.bridzhavirov.cz',
+  ...(DEV ? [FRONTEND_DEV_URL] : []),  
+]
 
 export default buildConfig({
   admin: {
@@ -40,20 +47,9 @@ export default buildConfig({
       
     }
   },
-  csrf: [
-    'http://vyuka.bridzhavirov.cz',
-    'https://vyuka.bridzhavirov.cz',
-    'http://www.vyuka.bridzhavirov.cz',
-    'https://www.vyuka.bridzhavirov.cz',
-    ...(DEV ? [`http://localhost:${APP_PORT}`, `http://127.0.0.1:${APP_PORT}`] : []),  
-  ],
-  cors: [
-    'http://vyuka.bridzhavirov.cz',
-    'https://vyuka.bridzhavirov.cz',
-    'http://www.vyuka.bridzhavirov.cz',
-    'https://www.vyuka.bridzhavirov.cz',
-    ...(DEV ? [FRONTEND_DEV_URL] : []),
-  ],
+
+  csrf: ALLOWED_URLS,
+  cors: ALLOWED_URLS,
    editor: lexicalEditor({}),
   collections: [Users, Articles],
   typescript: {

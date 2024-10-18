@@ -5,7 +5,13 @@ import adminsAndUser from "./adminsAndUser";
 
 const Users: CollectionConfig = {
   slug: "users",
-  auth: true,
+  auth: {
+    cookies: {
+      sameSite: "none",
+      secure: true,
+    }
+  },
+  
   admin: {
     useAsTitle: "email",
     group: {

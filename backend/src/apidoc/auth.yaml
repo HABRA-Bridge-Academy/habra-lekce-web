@@ -33,9 +33,12 @@ paths:
                 properties:
                   exp: 
                     type: number
+                    example: 1634025600
                     description: Token expiration time (UNIX timestamp)
                   message:
-
+                    type: string
+                    example: Auth passed
+                    description: Login success message
                   user:
                     $ref: '#/components/schemas/User'
         '401':

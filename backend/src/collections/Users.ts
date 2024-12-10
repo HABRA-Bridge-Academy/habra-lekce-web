@@ -1,17 +1,8 @@
-import { admins } from "../../access/admins";
-import { anyone } from "../../access/anyone";
-import { CollectionConfig } from "payload/types";
-import adminsAndUser from "./adminsAndUser";
+import type { CollectionConfig } from 'payload'
 
-const Users: CollectionConfig = {
-  slug: "users",
-  auth: {
-    cookies: {
-      sameSite: "none",
-      secure: true,
-    }
-  },
-  
+export const Users: CollectionConfig = {
+  slug: 'users',
+  auth: true,
   admin: {
     useAsTitle: "email",
     group: {
@@ -19,14 +10,7 @@ const Users: CollectionConfig = {
       cs: "Správa uživatelů",
     },
     defaultColumns: ["firstName", "lastName", "role", "email"],
-  },
-  access: {
-    read: adminsAndUser,
-    create: anyone,
-    update: adminsAndUser,
-    delete: admins,
-    admin: admins,
-  },
+  },  
   labels: {
     plural: {
       en: "Users",
@@ -81,6 +65,4 @@ const Users: CollectionConfig = {
       defaultValue: "user",
     },
   ],
-};
-
-export default Users;
+}

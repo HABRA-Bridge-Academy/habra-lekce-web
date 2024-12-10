@@ -15,7 +15,7 @@ services:
       retries: 30
 
   api:
-    image: node:18-alpine
+    image: node:20-alpine
     ports:
       - "3100:3100"
     volumes:

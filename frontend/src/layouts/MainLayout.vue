@@ -15,7 +15,7 @@
       </div>
       <v-spacer></v-spacer>
     </v-app-bar>
-    <v-navigation-drawer absolute v-model="drawer" :temporary="mobile">
+    <v-navigation-drawer v-if="auth" v-model="drawer" :temporary="mobile">
       <div class="sticky">
         <v-list class="nav-list">
           <v-list-item prepend-icon="mdi-view-dashboard" :title="userName" subtitle="Přihlášen"></v-list-item>

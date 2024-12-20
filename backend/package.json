@@ -12,7 +12,8 @@
     "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
     "lint": "cross-env NODE_OPTIONS=--no-deprecation next lint",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
-    "start": "cross-env NODE_OPTIONS=--no-deprecation next start"
+    "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
+    "test": "jest --forceExit --detectOpenHandles"
   },
   "dependencies": {
     "@payloadcms/db-mongodb": "latest",
@@ -21,16 +22,12 @@
     "@payloadcms/richtext-lexical": "latest",
     "cross-env": "^7.0.3",
     "graphql": "^16.8.1",
-    "next": "15.0.4",
     "payload": "latest",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "sharp": "0.32.6"
   },
   "devDependencies": {
-    "@types/node": "^22.5.4",
-    "@types/react": "19.0.1",
-    "@types/react-dom": "19.0.1",
     "eslint": "^8",
     "eslint-config-next": "15.0.4",
     "typescript": "5.7.2"

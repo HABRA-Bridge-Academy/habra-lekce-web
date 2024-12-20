@@ -9,6 +9,12 @@ import sharp from 'sharp'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
+import Articles from './collections/Articles'
+import PreApprovedEmails from './globals/PreapprovedEmails'
+import { en } from '@payloadcms/translations/languages/en'
+import { cs } from '@payloadcms/translations/languages/cs'
+import { CodeMedia } from './collections/CodeMedia'
+
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -19,8 +25,13 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    
   },
-  collections: [Users, Media],
+  i18n: {
+    supportedLanguages: {en,cs},
+  },
+  collections: [Users, Media, Articles, CodeMedia],
+  globals: [PreApprovedEmails],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

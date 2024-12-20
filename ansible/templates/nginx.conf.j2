@@ -2,7 +2,7 @@
 
 server {
 
-    server_name {{ web_domain }} www.{{ web_domain }};
+    server_name {{ web_domain }} ; 
 
     location / {
         proxy_pass http://localhost:{{ backend_port }};

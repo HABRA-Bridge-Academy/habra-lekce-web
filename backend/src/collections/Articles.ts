@@ -8,7 +8,7 @@ const userOrPublic: Access = ({
 }: {
   req: { user: any }
   doc: any
-}) => user || doc.public
+}) => user || doc?.public
 
 
 const Articles: CollectionConfig = {
@@ -34,11 +34,10 @@ const Articles: CollectionConfig = {
       type: 'textarea',
       required: true,
       access: {
-        read: ({ req: { user }, doc }) => user || doc.public,
+        read: ({ req: { user }, doc }) => user || doc?.public,
       },
     },
     { name: 'public', type: 'checkbox', defaultValue: false },
-    { name: 'created', type: 'date', required: true, defaultValue: () => Date.now() },
     { name: 'meta', type: 'json' },
   ],
   labels: {

@@ -65,4 +65,22 @@ export const Users: CollectionConfig = {
       defaultValue: "user",
     },
   ],
+  hooks: {
+    beforeChange: [
+      async ({ data, operation, req }) => {
+        if (operation === 'create') {
+          const preApprovedEmails = await req.payload.findGlobal({
+            slug: 'pre-approved-emails',
+          });
+          
+          const emailList = preApprovedEmails?.emailList?.split("\n") || [];
+
+          if (emailList.includes(data.email)) {
+            data.confirmed = true;
+          }
+        }
+        return data;
+      },
+    ],
+  },
 }

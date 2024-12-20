@@ -218,11 +218,10 @@
       become_user: habra
 
     - name: Start PM2 process
-      command: pm2 start dist/server.js --name habra-api-{{ deployment_name }} --log {{ log_dir }}/api-pm2.log
+      command: pm2 start yarn --name habra-api-{{ deployment_name }} --log {{ log_dir }}/api-pm2.log -- start
       args:
         chdir: "{{ vps_home }}/backend"
       environment:
-        PAYLOAD_CONFIG_PATH: "{{ vps_home }}/backend/dist/payload.config.js"
         NODE_ENV: "{{ node_env }}"
       become: yes
       become_user: habra

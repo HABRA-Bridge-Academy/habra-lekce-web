@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 
 const deploytime = process.env.PAYLOAD_PUBLIC_DEPLOY_TIME;

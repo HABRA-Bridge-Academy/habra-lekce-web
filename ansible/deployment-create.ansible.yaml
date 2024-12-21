@@ -219,7 +219,7 @@
       become_user: habra
 
     - name: Start PM2 process
-      command: pm2 start pnpm --name habra-api-{{ deployment_name }} --log {{ log_dir }}/api-pm2.log -- start
+      command: pm2 start pnpm --name habra-api-{{ deployment_name }} --log {{ log_dir }}/api-pm2.log -- start -p {{ backend_port }}
       args:
         chdir: "{{ vps_home }}/backend"
       environment:

@@ -306,11 +306,16 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   createdAt?: T;
 }
 /**
+ * List of email addresses that are pre-approved to sign up.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "pre-approved-emails".
  */
 export interface PreApprovedEmail {
   id: string;
+  /**
+   * Enter a list of email addresses that are pre-approved to sign up, separated by commas or new lines.
+   */
   emailList?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;

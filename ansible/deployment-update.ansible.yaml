@@ -73,14 +73,14 @@
       become_user: habra
       
     - name: Install backend dependencies
-      shell: yarn install --frozen-lockfile
+      shell: pnpm install
       args:
         chdir: "{{ vps_home }}/backend"
       become: yes 
       become_user: habra
 
     - name: Build backend
-      shell: yarn build
+      shell: pnpm build
       args:
         chdir: "{{ vps_home }}/backend"
       become: yes

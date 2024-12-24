@@ -1,3 +1,4 @@
+import { DEV } from '@/debug';
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 
@@ -15,6 +16,6 @@ export const GET = async () => {
     deploytime,
     gitref,
     local,
-    mode: process.env.NODE_ENV,
+    mode: DEV ? 'dev' : 'prod',
   })
 }

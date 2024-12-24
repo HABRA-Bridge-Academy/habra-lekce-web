@@ -13,7 +13,6 @@
     # notification_email: "{{ lookup('env', 'NOTIFICATION_EMAIL') }}"
     # git_ref: 'main'
     # repo_url: 'test'
-    # node_env: "development"
 
     # static config
     web_url: 'https://{{ web_domain }}' 
@@ -91,7 +90,6 @@
         global: yes
         state: present
 
-
     - name: Add user habra
       ansible.builtin.user:
         name: habra
@@ -151,20 +149,9 @@
       register: git_version
 
     - name: Add environment information to backend
-      copy:
+      template:
+        src: "backend.env.j2"
         dest: "{{ vps_home }}/backend/.env"
-        content: |
-          DATABASE_URI={{ db_url }}
-          PAYLOAD_SECRET={{ secret }}
-          PAYLOAD_PUBLIC_DEPLOY_TIME={{ ansible_date_time.iso8601 }}
-          PAYLOAD_PUBLIC_VERSION={{ git_version.stdout[:9] }}
-          FRONTEND_DEV_URL=http://localhost:8081
-          LOG_FILE={{ log_dir }}/api.log
-          LOG_ERROR_FILE={{ log_dir }}/api-errors.log
-          LOG_REQUEST_FILE={{ log_dir }}/api-requests.log
-          NOTIFICATION_EMAIL={{ notification_email }}
-          NODE_ENV={{ node_env }}
-
       become: yes
       become_user: habra
       
@@ -223,8 +210,6 @@
       command: pm2 start pnpm --name habra-api-{{ deployment_name }} --log {{ log_dir }}/api-pm2.log -- start -p {{ backend_port }}
       args:
         chdir: "{{ vps_home }}/backend"
-      environment:
-        NODE_ENV: "{{ node_env }}"
       become: yes
       become_user: habra
 

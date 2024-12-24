@@ -14,8 +14,8 @@ import PreApprovedEmails from './globals/PreapprovedEmails'
 import { en } from '@payloadcms/translations/languages/en'
 import { cs } from '@payloadcms/translations/languages/cs'
 import { CodeMedia } from './collections/CodeMedia'
+import { DEV } from './debug'
 
-const DEV = process.env.NODE_ENV === 'development'
 const FRONTEND_DEV_URL = process.env.FRONTEND_DEV_URL || 'http://localhost:8081'
 const LOCAL = process.env.PAYLOAD_PUBLIC_LOCAL || false
 const ALLOWED_URLS = [

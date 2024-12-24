@@ -22,10 +22,9 @@
 
 
   tasks:
-    - name: Display all variables/facts known for a host
+    - name: Display web domain 
       debug:
         var: web_domain 
-      tags: debug_info
 
     - name: Ensure Nginx is installed
       apt:

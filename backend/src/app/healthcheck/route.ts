@@ -6,9 +6,9 @@ export const GET = async () => {
     config: configPromise,
   })
 
-  const data = await payload.find({
-    collection: 'users',
-  })
 
-  return Response.json(data)
+  return Response.json({
+    status: 'ok',
+    mode: process.env.NODE_ENV,
+  })
 }

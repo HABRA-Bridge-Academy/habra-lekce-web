@@ -22,12 +22,9 @@
 
 
   tasks:
-    - name: Display all variables/facts known for a host
+    - name: Display web domain 
       debug:
         var: web_domain 
-      tags: debug_info
-
-   
 
     - name: Mark the repository as a safe directory for Git
       command: git config --global --add safe.directory "{{ vps_home }}"
@@ -91,11 +88,6 @@
       become_user: habra
 
   handlers:
-    - name: Restart Nginx
-      service:
-        name: nginx
-        state: restarted
-
     - name: Restart Cron
       service:
         name: cron

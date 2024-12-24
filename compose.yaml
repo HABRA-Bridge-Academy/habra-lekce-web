@@ -15,24 +15,25 @@ services:
       retries: 30
 
   api:
-    image: node:20-alpine
     ports:
       - "3100:3100"
+    image: node:18-alpine
     volumes:
       - ./backend:/home/node/app
-      - ./backend/node_modules:/home/node/app/node_modules
+      - node_modules:/home/node/app/node_modules
     working_dir: /home/node/app/
-    command: sh -c "apk add --no-cache curl && pnpm install && pnpm dev"
+    command: sh -c "corepack enable && corepack prepare pnpm@latest --activate && pnpm install && pnpm dev --port 3100"
     depends_on:
       mongo:
         condition: service_healthy
     environment:
       - NODE_ENV=development
-      - APP_PORT=3100
       - PAYLOAD_PUBLIC_LOCAL=true
       - FRONTEND_DEV_URL=http://localhost:8081
-      - DATABASE_URI=mongodb://mongo/habralekce
-      - PAYLOAD_SECRET=ed56e9cf3e22912dfd19cba8
+      # - DATABASE_URI=mongodb://mongo/habralekce
+      # - PAYLOAD_SECRET=ed56e9cf3e22912dfd19cba8
+    env_file:
+      - ./backend/.env
     healthcheck:
         test: ["CMD", "curl", "-f", "http://localhost:3100/health"]
         interval: 5s
@@ -126,3 +127,4 @@ services:
 
 volumes:
   mongo-data:
+  node_modules:

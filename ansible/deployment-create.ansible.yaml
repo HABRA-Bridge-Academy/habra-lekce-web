@@ -85,7 +85,7 @@
         global: yes
         state: present
 
-    - name: Ensure Yarn is installed via npm
+    - name: Ensure pnpm is installed via npm
       npm:
         name: pnpm
         global: yes

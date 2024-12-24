@@ -13,6 +13,7 @@
     # notification_email: "{{ lookup('env', 'NOTIFICATION_EMAIL') }}"
     # git_ref: 'main'
     # repo_url: 'test'
+    # node_env: "development"
 
     # static config
     web_url: 'https://{{ web_domain }}' 
@@ -162,6 +163,7 @@
           LOG_ERROR_FILE={{ log_dir }}/api-errors.log
           LOG_REQUEST_FILE={{ log_dir }}/api-requests.log
           NOTIFICATION_EMAIL={{ notification_email }}
+          NODE_ENV={{ node_env }}
 
       become: yes
       become_user: habra

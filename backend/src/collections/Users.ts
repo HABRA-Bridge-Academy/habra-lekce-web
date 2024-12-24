@@ -1,9 +1,16 @@
+import { admins, adminsAndUser, anyone, checkRole } from '@/access';
+import { DEV } from '@/debug';
 import type { CollectionConfig } from 'payload'
 
 export const Users: CollectionConfig = {
   slug: 'users',
   auth: {
     removeTokenFromResponses: true,
+    cookies: {
+      secure: true,
+      domain: "bridzhavirov.cz",
+      sameSite: DEV ? "None" : "Strict",
+    }
   },
   admin: {
     useAsTitle: "email",
@@ -22,6 +29,13 @@ export const Users: CollectionConfig = {
       en: "User",
       cs: "Uživatel",
     },
+  },
+  access: {
+    read: adminsAndUser,
+    create: anyone,
+    update: adminsAndUser,
+    delete: admins,
+    admin: ({ req: { user } }) => checkRole(['admin'], user)
   },
   fields: [
     // Email added by default

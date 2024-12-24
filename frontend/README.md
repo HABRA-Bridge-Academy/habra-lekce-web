@@ -1,15 +1,53 @@
-# Habra výuka - webový frontend
+# default
 
-Tento adresář obsahuje zdrojové kódy pro frontendovou část aplikace.
+## Project setup
 
-Technologie: Vue.js v3, Vuetify, Pinia
+```
+# yarn
+yarn
 
-## Informace pro vývojáře
+# npm
+npm install
 
-Viz [DEVELOPMENT.md](DEVELOPMENT.md).
+# pnpm
+pnpm install
 
+# bun
+bun install
+```
 
-## Autoři
+### Compiles and hot-reloads for development
 
-- Matyáš Lysek
-- Zdeněk Tomis
+```
+# yarn
+yarn dev
+
+# npm
+npm run dev
+
+# pnpm
+pnpm dev
+
+# bun
+bun run dev
+```
+
+### Compiles and minifies for production
+
+```
+# yarn
+yarn build
+
+# npm
+npm run build
+
+# pnpm
+pnpm build
+
+# bun
+bun run build
+```
+
+### Customize configuration
+
+See [Configuration Reference](https://vitejs.dev/config/).

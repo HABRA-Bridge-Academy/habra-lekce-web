@@ -6,7 +6,6 @@ export default class User {
       data.lastName,
       data.email,
       data.role,
-      data.hasPassword
     );
   }
 
@@ -16,7 +15,6 @@ export default class User {
     public lastName: string,
     public email: string,
     public role: string,
-    public hasPassword: boolean
   ) {}
 
   get fullName(): string {

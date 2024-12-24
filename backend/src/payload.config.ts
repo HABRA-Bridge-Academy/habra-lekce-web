@@ -16,7 +16,7 @@ import { cs } from '@payloadcms/translations/languages/cs'
 import { CodeMedia } from './collections/CodeMedia'
 
 const DEV = process.env.NODE_ENV === 'development'
-const FRONTEND_DEV_URL = process.env.FRONTEND_DEV_URL || 'http://localhost:8080'
+const FRONTEND_DEV_URL = process.env.FRONTEND_DEV_URL || 'http://localhost:8081'
 const LOCAL = process.env.PAYLOAD_PUBLIC_LOCAL || false
 const ALLOWED_URLS = [
   'http://vyuka.bridzhavirov.cz',
@@ -70,7 +70,9 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
-  cors: ALLOWED_URLS,
+  cors: {
+    origins: ALLOWED_URLS,
+  },
   csrf: ALLOWED_URLS,
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || '',

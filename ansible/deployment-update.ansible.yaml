@@ -60,7 +60,6 @@
         content: |
           DATABASE_URI={{ db_url }}
           PAYLOAD_SECRET={{ secret }}
-          APP_PORT={{ backend_port }}
           PAYLOAD_PUBLIC_DEPLOY_TIME={{ ansible_date_time.iso8601 }}
           PAYLOAD_PUBLIC_VERSION={{ git_version.stdout[:9] }}
           FRONTEND_DEV_URL=http://localhost:8081

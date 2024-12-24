@@ -1,9 +1,17 @@
-import React from 'react';
+'use client';
 
-export default function Logo() {
-    return  <img
+import React from 'react';
+import Image from 'next/image'
+
+const Logo : React.FC = () => {
+    return (
+        <Image
             src="/assets/logo-xl.svg"
             alt="HABRA Logo"
-            style={{ width: '200px' }}
+            width={0} height={0}
+            style={{ width: '200px', height: "auto" }}
         />
+    );
 }
+
+export default Logo;

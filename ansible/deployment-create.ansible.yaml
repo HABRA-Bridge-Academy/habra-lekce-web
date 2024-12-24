@@ -84,9 +84,10 @@
         name: pm2
         global: yes
         state: present
-    - name: Ensure Yarn is installed via npm
+
+    - name: Ensure pnpm is installed via npm
       npm:
-        name: yarn
+        name: pnpm
         global: yes
         state: present
 
@@ -189,14 +190,14 @@
 
 
     - name: Install backend dependencies
-      shell: yarn install --frozen-lockfile
+      shell: pnpm install 
       args:
         chdir: "{{ vps_home }}/backend"
       become: yes 
       become_user: habra
 
     - name: Build backend
-      shell: yarn build
+      shell: pnpm build
       args:
         chdir: "{{ vps_home }}/backend"
       become: yes
@@ -218,11 +219,10 @@
       become_user: habra
 
     - name: Start PM2 process
-      command: pm2 start dist/server.js --name habra-api-{{ deployment_name }} --log {{ log_dir }}/api-pm2.log
+      command: pm2 start pnpm --name habra-api-{{ deployment_name }} --log {{ log_dir }}/api-pm2.log -- start -p {{ backend_port }}
       args:
         chdir: "{{ vps_home }}/backend"
       environment:
-        PAYLOAD_CONFIG_PATH: "{{ vps_home }}/backend/dist/payload.config.js"
         NODE_ENV: "{{ node_env }}"
       become: yes
       become_user: habra

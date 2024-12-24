@@ -1,7 +1,8 @@
 <template>
     <router-link :to="{ name: 'home' }" class="logo">
-        <v-img v-if="variant === 'xl'" src="@/assets/logo-xl.png">
+        <v-img  v-if="variant === 'xl'" src="@/assets/logo-xl.png">
         </v-img>
+        <v-img v-else-if="variant== 'plain'" src="@/assets/logo-plain.png"></v-img>
     </router-link>
 </template>
 

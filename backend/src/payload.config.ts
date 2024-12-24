@@ -1,68 +1,82 @@
-import path from 'path'
-
-import { payloadCloud } from '@payloadcms/plugin-cloud'
+// storage-adapter-import-placeholder
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
-import { webpackBundler } from '@payloadcms/bundler-webpack'
-import { buildConfig } from 'payload/config'
+import { payloadCloudPlugin } from '@payloadcms/payload-cloud'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import path from 'path'
+import { buildConfig, CustomComponent } from 'payload'
+import { fileURLToPath } from 'url'
+import sharp from 'sharp'
 
-import Users from './collections/users/Users'
-import Articles from './collections/articles/Articles'
-import Logo from './components/Logo'
-import Icon from './components/Icon'
-import VersionInfo from './components/VersionInfo'
+import { Users } from './collections/Users'
+import { Media } from './collections/Media'
+import Articles from './collections/Articles'
+import PreApprovedEmails from './globals/PreapprovedEmails'
+import { en } from '@payloadcms/translations/languages/en'
+import { cs } from '@payloadcms/translations/languages/cs'
+import { CodeMedia } from './collections/CodeMedia'
 
-const DEV = process.env.NODE_ENV === 'development';
-const APP_PORT = process.env.APP_PORT || 3100;
-const FRONTEND_DEV_URL = process.env.FRONTEND_DEV_URL || "http://localhost:8080"; 
-const LOCAL = process.env.PAYLOAD_PUBLIC_LOCAL || false;
+const DEV = process.env.NODE_ENV === 'development'
+const FRONTEND_DEV_URL = process.env.FRONTEND_DEV_URL || 'http://localhost:8080'
+const LOCAL = process.env.PAYLOAD_PUBLIC_LOCAL || false
 const ALLOWED_URLS = [
   'http://vyuka.bridzhavirov.cz',
   'https://vyuka.bridzhavirov.cz',
   'http://www.vyuka.bridzhavirov.cz',
   'https://www.vyuka.bridzhavirov.cz',
-  ...(DEV ? [FRONTEND_DEV_URL] : []),  
+  ...(DEV ? [FRONTEND_DEV_URL] : []),
 ]
+
+const filename = fileURLToPath(import.meta.url)
+const dirname = path.dirname(filename)
 
 export default buildConfig({
   admin: {
     user: Users.slug,
-    bundler: webpackBundler(),
-
+    importMap: {
+      baseDir: path.resolve(dirname, 'src'),
+    },
     meta: {
       titleSuffix: '- HABRA Admin',
-      favicon: LOCAL ? '/assets/favicon-green-admin-local.png' 
-               : DEV ? '/assets/favicon-green-admin-dev.png' 
-               : '/assets/favicon-green-admin.png',
-      ogImage: '/assets/logo.svg',
+      icons: [
+        {
+          rel: 'icon',
+          type: 'image/png',
+
+          url: LOCAL
+            ? '/assets/favicon-green-admin-local.png'
+            : DEV
+              ? '/assets/favicon-green-admin-dev.png'
+              : '/assets/favicon-green-admin.png',
+        },
+      ],
     },
     components: {
       graphics: {
-        Logo: Logo,
-        Icon: Icon,
+        Logo: 'src/components/Logo',
+        Icon: 'src/components/Icon',
       },
       afterNavLinks: [
-        VersionInfo
-      ]
-      
-    }
+        // VersionInfo
+      ],
+    },
   },
-
-  csrf: ALLOWED_URLS,
-  cors: ALLOWED_URLS,
-   editor: lexicalEditor({}),
-  collections: [Users, Articles],
+  i18n: {
+    supportedLanguages: { en, cs },
+  },
+  collections: [Users, Media, Articles, CodeMedia],
+  globals: [PreApprovedEmails],
+  secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
-    outputFile: path.resolve(__dirname, 'payload-types.ts'),
+    outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
-  graphQL: {
-    schemaOutputFile: path.resolve(__dirname, 'generated-schema.graphql'),
-  },
-  plugins: [payloadCloud()],
+  cors: ALLOWED_URLS,
+  csrf: ALLOWED_URLS,
   db: mongooseAdapter({
-    url: process.env.DATABASE_URI,
+    url: process.env.DATABASE_URI || '',
   }),
-  custom: {
-    port: APP_PORT,
-  }
+  sharp,
+  plugins: [
+    payloadCloudPlugin(),
+    // storage-adapter-placeholder
+  ],
 })

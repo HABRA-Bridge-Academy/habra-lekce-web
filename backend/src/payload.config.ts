@@ -30,7 +30,7 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
-  debug: DEV,
+  // debug: DEV,
   admin: {
     user: Users.slug,
     importMap: {
@@ -73,7 +73,7 @@ export default buildConfig({
   cors: {
     origins: ALLOWED_URLS,
   },
-  csrf: ALLOWED_URLS,
+  // csrf: ALLOWED_URLS,
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || '',
   }),

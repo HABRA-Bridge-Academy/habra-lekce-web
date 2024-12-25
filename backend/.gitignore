@@ -44,3 +44,4 @@ next-env.d.ts
 /code-media
 
 .pnpm-store/
+node_modules/

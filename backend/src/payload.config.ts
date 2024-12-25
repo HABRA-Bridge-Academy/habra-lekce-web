@@ -3,7 +3,7 @@ import { mongooseAdapter } from '@payloadcms/db-mongodb'
 import { payloadCloudPlugin } from '@payloadcms/payload-cloud'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
-import { buildConfig, CustomComponent } from 'payload'
+import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
@@ -14,10 +14,10 @@ import PreApprovedEmails from './globals/PreapprovedEmails'
 import { en } from '@payloadcms/translations/languages/en'
 import { cs } from '@payloadcms/translations/languages/cs'
 import { CodeMedia } from './collections/CodeMedia'
-import { DEV } from './debug'
+import { DEV, LOCAL_SERVER } from './debug'
+import Homepage from './globals/Homepage'
 
 const FRONTEND_DEV_URL = process.env.FRONTEND_DEV_URL || 'http://localhost:8081'
-const LOCAL = process.env.PAYLOAD_PUBLIC_LOCAL || false
 const ALLOWED_URLS = [
   'http://vyuka.bridzhavirov.cz',
   'https://vyuka.bridzhavirov.cz',
@@ -43,7 +43,7 @@ export default buildConfig({
           rel: 'icon',
           type: 'image/png',
 
-          url: LOCAL
+          url: LOCAL_SERVER
             ? '/assets/favicon-green-admin-local.png'
             : DEV
               ? '/assets/favicon-green-admin-dev.png'
@@ -65,7 +65,7 @@ export default buildConfig({
     supportedLanguages: { en, cs },
   },
   collections: [Users, Media, Articles, CodeMedia],
-  globals: [PreApprovedEmails],
+  globals: [PreApprovedEmails, Homepage],
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
@@ -77,6 +77,7 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || '',
   }),
+  editor: lexicalEditor(),
   sharp,
   plugins: [
     payloadCloudPlugin(),

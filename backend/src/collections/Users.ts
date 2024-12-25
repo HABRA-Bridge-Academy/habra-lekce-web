@@ -1,17 +1,10 @@
 import { admins, adminsAndUser, anyone, checkRole } from '@/access';
-import { DEV } from '@/debug';
+import { DEV, LOCAL_SERVER } from '@/debug';
 import type { CollectionConfig } from 'payload'
 
 export const Users: CollectionConfig = {
   slug: 'users',
-  auth: {
-    removeTokenFromResponses: true,
-    cookies: {
-      secure: true,
-      domain: "bridzhavirov.cz",
-      sameSite: DEV ? "None" : "Strict",
-    }
-  },
+  auth: true,
   admin: {
     useAsTitle: "email",
     group: {

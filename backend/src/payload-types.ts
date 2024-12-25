@@ -34,9 +34,11 @@ export interface Config {
   };
   globals: {
     'pre-approved-emails': PreApprovedEmail;
+    homepage: Homepage;
   };
   globalsSelect: {
     'pre-approved-emails': PreApprovedEmailsSelect<false> | PreApprovedEmailsSelect<true>;
+    homepage: HomepageSelect<false> | HomepageSelect<true>;
   };
   locale: null;
   user: User & {
@@ -321,11 +323,47 @@ export interface PreApprovedEmail {
   createdAt?: string | null;
 }
 /**
+ * Homepage settings
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "homepage".
+ */
+export interface Homepage {
+  id: string;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "pre-approved-emails_select".
  */
 export interface PreApprovedEmailsSelect<T extends boolean = true> {
   emailList?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "homepage_select".
+ */
+export interface HomepageSelect<T extends boolean = true> {
+  content?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

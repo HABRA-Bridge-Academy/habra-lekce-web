@@ -1,4 +1,4 @@
-.git
-*Dockerfile*
-*docker-compose*
+.react-router
+build
 node_modules
+README.md

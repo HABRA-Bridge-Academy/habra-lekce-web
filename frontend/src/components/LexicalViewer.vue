@@ -1,56 +1,70 @@
 <template>
   <LexicalComposer :initial-config="editorConfig">
-    <LexicalRichTextPlugin>
+    <LexicalPlainTextPlugin>
       <template #contentEditable>
         <LexicalContentEditable />
       </template>
       <template #placeholder>
         <div>Loading content...</div>
       </template>
-    </LexicalRichTextPlugin>
+    </LexicalPlainTextPlugin>
+    <LexicalHistoryPlugin />
   </LexicalComposer>
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from 'vue';
-import { LexicalComposer, LexicalContentEditable, LexicalRichTextPlugin } from 'lexical-vue';
-import { createEditor } from 'lexical';
+import { ref, onMounted } from 'vue';
+import {
+  LexicalComposer,
+  LexicalPlainTextPlugin,
+  LexicalContentEditable,
+  LexicalHistoryPlugin,
+  useLexicalComposer,
+} from 'lexical-vue';
+
+const editor = ref(null)
+
+onMounted(() => {
+  editor.value = useLexicalComposer();
+}); 
+
+
+
+if(!editor) {
+  console.error('Lexical Composer not found');
+}
 
 const props = defineProps({
-  serializedState: {
-    type: String,
+  editorState: {
+    type: Object,
     required: true,
   },
 });
 
 const editorConfig = {
-  namespace: 'MyEditor',
-  editable: false, // Set the editor to read-only
-  theme: {
-    // Define your theme styling here
-  },
+  namespace: 'PayloadCMSLexicalEditor',
+  theme: {}, // Optional: Define your theme styles here
   onError(error) {
-    console.error('Lexical Error:', error);
+    console.error('Lexical Editor Error:', error);
   },
 };
 
-let editor = null;
 
 onMounted(() => {
-  editor = createEditor(editorConfig);
-  if (props.serializedState && editor) {
-    const editorState = editor.parseEditorState(props.serializedState);
-    editor.setEditorState(editorState);
+
+  try {
+
+    const content =  { "root": { "children": [ { "children": [ { "detail": 0, "format": 0, "mode": "normal", "style": "", "text": "Test test", "type": "text", "version": 1 } ], "direction": "ltr", "format": "", "indent": 0, "type": "paragraph", "version": 1, "textFormat": 0, "textStyle": "" }, { "children": [ { "detail": 0, "format": 0, "mode": "normal", "style": "", "text": "Toto je druhý odstavec", "type": "text", "version": 1 } ], "direction": "ltr", "format": "", "indent": 0, "type": "paragraph", "version": 1, "textFormat": 0, "textStyle": "" } ], "direction": "ltr", "format": "", "indent": 0, "type": "root", "version": 1 } }
+    const parsedEditorState = editor.parseEditorState(content);
+
+    if (parsedEditorState) {
+      console.log('Parsed State:', parsedEditorState);
+      editor.setEditorState(parsedEditorState);
+    } else {
+      console.warn('Editor state could not be parsed.');
+    }
+  } catch (err) {
+    console.error('Error parsing editor state:', err);
   }
 });
-
-watch(
-  () => props.serializedState,
-  (newState) => {
-    if (newState && editor) {
-      const editorState = editor.parseEditorState(newState);
-      editor.setEditorState(editorState);
-    }
-  }
-);
 </script>

@@ -1,6 +1,7 @@
 // Composables
 import { useAuthStore } from "@/stores/Auth";
 import { before } from "node:test";
+import path from "path";
 import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
@@ -79,6 +80,10 @@ const routes = [
       }
     ],
   },
+  {
+    path: "/test",
+    component: () => import("@/components/LexicalViewer.vue"),
+  }
 ];
 
 const router = createRouter({

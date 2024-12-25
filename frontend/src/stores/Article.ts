@@ -1,33 +1,7 @@
 import { defineStore } from "pinia";
 import Article from "@/class/article";
 import axios from "@/plugins/axios";
-import { useAuthStore } from "./Auth";
-
-const authStore = useAuthStore();
-export async function articleStore() {
-  try {
-    const response = await axios.get("/articles");
-    const ArticleList = response.data.items as Article[];
-    console.debug("Articles found:");
-    return ArticleList;
-  } catch (error: any) {
-    console.error("Article error:", error.message);
-    throw error;
-  }
-}
-
-// TODO move this to the store below
-export async function articleStoreGet(id: String): Promise<Article> {
-  try {
-    const response = await axios.get(`/articles/${id}`);
-    const a = response.data as Article;
-    console.debug("Articles found:");
-    return new Article(a.id, a.title, a.content, a.Public, a.created, a.meta);
-  } catch (error: any) {
-    console.error("Article error:", error.message);
-    throw error;
-  }
-}
+import Homepage from "@/class/homepage";
 
 export const useArticleStore = defineStore("article", {
   state: () => {
@@ -56,6 +30,16 @@ export const useArticleStore = defineStore("article", {
         throw error;
       }
     },
+    async getArticle(id: String): Promise<Article> {
+      try {
+        const response = await axios.get(`/articles/${id}`);
+        const a = response.data as Article;
+        console.debug("Articles found:");
+        return new Article(a.id, a.title, a.content, a.Public, a.created, a.meta);
+      } catch (error: any) {
+        console.error("Article error:", error.message);
+        throw error;
+      }},
     async getArticles(): Promise<Article[]> {
       await this.fetchArticles();
       return this._articles;
@@ -64,5 +48,14 @@ export const useArticleStore = defineStore("article", {
       await this.fetchArticles();
       return this._articlesByYear;
     },
+    async getHomepage(): Promise<Homepage> {
+      try {
+        const response = await axios.get("/globals/homepage");
+        return new Homepage(response.data.content);
+      } catch (error: any) {
+        console.error("Homepage error:", error.message);
+        throw error;
+      }
+    }
   },
 });

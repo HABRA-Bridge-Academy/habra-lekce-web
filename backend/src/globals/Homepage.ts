@@ -1,3 +1,4 @@
+import { anyone } from '@/access'
 import { GlobalConfig } from 'payload'
 
 const Homepage: GlobalConfig = {
@@ -5,6 +6,9 @@ const Homepage: GlobalConfig = {
   label: {
     en: 'Homepage',
     cs: 'Domovská stránka',
+  },
+  access: {
+    read: anyone
   },
   admin: {
     description: {

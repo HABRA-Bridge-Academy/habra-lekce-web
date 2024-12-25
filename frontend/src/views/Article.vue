@@ -5,22 +5,27 @@
 </template>
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
-import { articleStoreGet, articleStore } from '@/stores/Article';
+import { useArticleStore } from '@/stores/Article';
 import { onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 
-const loading = ref(false)
-const articleContent = ref(null as string | null)
+const articleStore = useArticleStore()
 const route = useRoute()
+
+
+const loading = ref(false)
 const articleId = computed(() => route.params.id as string | undefined)
 watch(articleId, (id) => loadArticle(id))
 onMounted(() => loadArticle(articleId.value))
+
+const articleContent = ref(null as string | null)
+
 
 async function loadArticle(id: string | undefined) {
     if (!id) return;
     try {
         loading.value = true;
-        const article = await articleStoreGet(id);
+        const article = await articleStore.getArticle(id);
         articleContent.value = article.content
     } catch (error: any) {
     } finally {
